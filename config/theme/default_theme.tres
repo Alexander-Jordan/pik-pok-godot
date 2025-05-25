@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://7iwb4w13baxm"]
+
+[ext_resource type="FontFile" uid="uid://dx8xswb1y5bmd" path="res://assets/fonts/pixel_gosub/Pixel Gosub.otf" id="1_cwq3q"]
+
+[resource]
+default_font = ExtResource("1_cwq3q")
