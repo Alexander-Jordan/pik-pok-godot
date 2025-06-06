@@ -10,6 +10,9 @@ var input_direction_map: Dictionary[String, Vector2i] = {
 }
 
 func _process(delta: float) -> void:
+	if GM.mode != GM.Mode.PLAYING:
+		return
+	
 	super(delta)
 	if coords_move_to is Vector2i:
 		global_position = global_position.move_toward(coords_move_to, delta*speed)
@@ -18,9 +21,6 @@ func _ready() -> void:
 	GM.mode_changed.connect(on_game_mode_changed)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if GM.mode != GM.Mode.PLAYING:
-		return
-	
 	for direction in input_direction_map:
 		if event.is_action_pressed(direction):
 			tile_direction = input_direction_map[direction]
