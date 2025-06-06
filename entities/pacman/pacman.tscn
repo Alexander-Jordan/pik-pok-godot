@@ -1,8 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://y1pp0axcp1s0"]
+[gd_scene load_steps=17 format=3 uid="uid://y1pp0axcp1s0"]
 
 [ext_resource type="Script" uid="uid://cnin7pfpq1hgb" path="res://entities/pacman/pacman.gd" id="1_kyvah"]
 [ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="1_osiaf"]
-[ext_resource type="Script" uid="uid://bc7cs2mpdsyeh" path="res://utilities/grid_2d/grid_traveller.gd" id="2_5am7l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5am7l"]
 atlas = ExtResource("1_osiaf")
@@ -118,7 +117,3 @@ metadata/_custom_type_script = "uid://cnin7pfpq1hgb"
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 1, 0, 1)
 sprite_frames = SubResource("SpriteFrames_r3pmm")
-
-[node name="GridTraveller" type="Node2D" parent="."]
-script = ExtResource("2_5am7l")
-metadata/_custom_type_script = "uid://bc7cs2mpdsyeh"
