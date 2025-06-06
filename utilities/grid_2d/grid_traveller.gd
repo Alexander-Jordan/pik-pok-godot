@@ -10,12 +10,14 @@ var tile_direction: Vector2i = Vector2i.ZERO:
 	set(td):
 		if td != Vector2i.ZERO and td != Vector2i.UP and td != Vector2i.DOWN and td != Vector2i.LEFT and td != Vector2i.RIGHT:
 			return
+		if !is_tile_walkable(tile + td):
+			return
 		tile_direction = td
 		on_tile_direction_changed()
 var tile_direction_next: Vector2i = Vector2.ZERO
 var next_tile: Variant = null
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if coords_move_to is Vector2i:
 		if global_position == Vector2(coords_move_to):
 			coords_move_to = null
@@ -36,8 +38,8 @@ func calculate_tile_direction_next() -> Vector2i:
 	var direction: Vector2i = tile_direction
 	return direction if is_tile_walkable(tile + direction) else Vector2i.ZERO
 
-func is_tile_walkable(tile: Vector2i) -> bool:
-	var tile_data: TileData = grid.get_tiledata_from_tile(tile)
+func is_tile_walkable(t: Vector2i) -> bool:
+	var tile_data: TileData = grid.get_tiledata_from_tile(t)
 	if tile_data != null and tile_data.has_custom_data('type'):
 		match tile_data.get_custom_data('type'):
 			'wall':
