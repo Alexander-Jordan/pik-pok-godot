@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://ctq53hs60mtf5"]
+
+[ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="1_u4o7d"]
+[ext_resource type="Script" uid="uid://c2ev3kp0q8wn7" path="res://entities/pacdot/pacdot.gd" id="1_un84u"]
+[ext_resource type="Script" uid="uid://cinn5yixd7nw6" path="res://common/collect/collectable_2d.gd" id="2_un84u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7rxqt"]
+size = Vector2(2, 2)
+
+[node name="Pacdot" type="Node2D"]
+script = ExtResource("1_un84u")
+
+[node name="Collectable2D" type="Area2D" parent="."]
+script = ExtResource("2_un84u")
+identifier = "pacdot"
+metadata/_custom_type_script = "uid://cinn5yixd7nw6"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collectable2D"]
+shape = SubResource("RectangleShape2D_7rxqt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_u4o7d")
+region_enabled = true
+region_rect = Rect2(16, 64, 8, 8)

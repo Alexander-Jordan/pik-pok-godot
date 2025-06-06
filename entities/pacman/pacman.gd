@@ -1,6 +1,7 @@
 class_name Pacman extends GridTraveller
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var spawn_point: Vector2 = global_position
 
 var input_direction_map: Dictionary[String, Vector2i] = {
 	'up': Vector2i.UP,
@@ -19,6 +20,7 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	GM.mode_changed.connect(on_game_mode_changed)
+	GM.reset.connect(reset)
 
 func _unhandled_input(event: InputEvent) -> void:
 	for direction in input_direction_map:
@@ -30,6 +32,12 @@ func on_game_mode_changed(mode: GM.Mode) -> void:
 	match mode:
 		GM.Mode.PLAYING:
 			start()
+
+func reset() -> void:
+	animated_sprite_2d.stop()
+	global_position = spawn_point
+	tile = grid.get_tile_from_coords(global_position)
+	tile_direction = Vector2i.ZERO
 
 func start() -> void:
 	if tile_direction == Vector2i.ZERO:

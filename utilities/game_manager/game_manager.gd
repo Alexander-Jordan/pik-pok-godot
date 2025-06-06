@@ -14,6 +14,7 @@ var mode: Mode = Mode.NONE:
 		mode_changed.emit(m)
 
 signal mode_changed(mode: Mode)
+signal reset
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed('dev_mode_none'):
@@ -22,3 +23,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		mode = Mode.PLAYING
 	if event.is_action_pressed('dev_mode_over'):
 		mode = Mode.OVER
+	if event.is_action_pressed('dev_reset'):
+		reset.emit()
+		mode = Mode.NONE
