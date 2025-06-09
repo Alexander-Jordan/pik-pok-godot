@@ -15,8 +15,8 @@ func _process(delta: float) -> void:
 		return
 	
 	super(delta)
-	if coords_move_to is Vector2i:
-		global_position = global_position.move_toward(coords_move_to, delta*speed)
+	if global_position != Vector2(coords_move_to):
+		global_position = global_position.move_toward(coords_move_to,delta * speed)
 
 func _ready() -> void:
 	GM.mode_changed.connect(on_game_mode_changed)
