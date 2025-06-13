@@ -1,12 +1,16 @@
-[gd_scene load_steps=22 format=4 uid="uid://bacrx2nx2m1ed"]
+[gd_scene load_steps=26 format=4 uid="uid://bacrx2nx2m1ed"]
 
 [ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="1_6almw"]
 [ext_resource type="Script" uid="uid://7jp8awjtagrf" path="res://utilities/grid_2d/grid_2d.gd" id="1_60rri"]
 [ext_resource type="PackedScene" uid="uid://y1pp0axcp1s0" path="res://entities/pacman/pacman.tscn" id="3_5powy"]
 [ext_resource type="Script" uid="uid://bfdww3k002drj" path="res://entities/pacdot/pacdot_spawner.gd" id="4_j6wwd"]
+[ext_resource type="PackedScene" uid="uid://cbau7oviirue2" path="res://entities/ghost/clyde/clyde.tscn" id="5_3f6tk"]
 [ext_resource type="PackedScene" uid="uid://ctq53hs60mtf5" path="res://entities/pacdot/pacdot.tscn" id="5_usqqw"]
+[ext_resource type="PackedScene" uid="uid://bxccev2ecvbjc" path="res://entities/ghost/inky/inky.tscn" id="6_axbkc"]
 [ext_resource type="PackedScene" uid="uid://r8jmwj18bytq" path="res://entities/pacdot/power_pellet/power_pellet.tscn" id="6_woy08"]
 [ext_resource type="PackedScene" uid="uid://b6xioh2e6t3du" path="res://ui/game/ui_game.tscn" id="7_4vbm2"]
+[ext_resource type="PackedScene" uid="uid://bprwu8crorneb" path="res://entities/ghost/pinky/pinky.tscn" id="7_802tp"]
+[ext_resource type="PackedScene" uid="uid://b3ewmx1wg4myd" path="res://entities/ghost/blinky/blinky.tscn" id="8_no1gd"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_60rri"]
 tile_data = PackedInt32Array(0, 0, 9, 65536, 0, 10, 131072, 0, 11, 1, 65536, 9, 65537, 65536, 10, 131073, 65536, 11, 2, 65536, 9, 65538, 65536, 10, 131074, 65536, 11, 3, 65536, 9, 65539, 65536, 10, 131075, 65536, 11, 4, 131072, 9, 65540, 131072, 10, 131076, 131072, 11)
@@ -156,6 +160,25 @@ tile_set = SubResource("TileSet_axbkc")
 
 [node name="Pacman" parent="." node_paths=PackedStringArray("grid") instance=ExtResource("3_5powy")]
 position = Vector2(112, 211)
+grid = NodePath("../Grid2D")
+
+[node name="Blinky" parent="." node_paths=PackedStringArray("pacman", "grid") instance=ExtResource("8_no1gd")]
+position = Vector2(112, 115)
+pacman = NodePath("../Pacman")
+tile_target_scatter = Vector2i(24, 0)
+grid = NodePath("../Grid2D")
+
+[node name="Clyde" parent="." node_paths=PackedStringArray("pacman", "grid") instance=ExtResource("5_3f6tk")]
+position = Vector2(128, 163)
+pacman = NodePath("../Pacman")
+grid = NodePath("../Grid2D")
+
+[node name="Inky" parent="." node_paths=PackedStringArray("grid") instance=ExtResource("6_axbkc")]
+position = Vector2(98, 163)
+grid = NodePath("../Grid2D")
+
+[node name="Pinky" parent="." node_paths=PackedStringArray("grid") instance=ExtResource("7_802tp")]
+position = Vector2(113, 163)
 grid = NodePath("../Grid2D")
 
 [node name="PacdotSpawner" type="Node2D" parent="."]

@@ -3,12 +3,23 @@ class_name GameManager extends Node
 const LIVES_MIN: int = 0
 const LIVES_MAX: int = 8
 
+enum GhostMode {
+	CHASE,
+	SCATTER,
+	FRIGHTENED,
+}
 enum Mode {
 	NONE,
 	PLAYING,
 	OVER,
 }
 
+var ghost_mode: GhostMode = GhostMode.SCATTER:
+	set(gm):
+		if !GhostMode.values().has(gm) or ghost_mode == gm:
+			return
+		ghost_mode = gm
+		ghost_mode_changed.emit(gm)
 var lives: int = 3:
 	set(l):
 		if l < LIVES_MIN or l > LIVES_MAX or l == lives:
@@ -27,6 +38,7 @@ var mode: Mode = Mode.NONE:
 		if m == Mode.PLAYING:
 			SS.stats.score = 0
 
+signal ghost_mode_changed(ghost_mode: GhostMode)
 signal lives_changed(lives: int)
 signal mode_changed(mode: Mode)
 signal reset

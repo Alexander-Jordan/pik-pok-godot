@@ -115,6 +115,7 @@ animations = [{
 radius = 4.12311
 
 [node name="Pacman" type="Node2D"]
+z_index = 1
 script = ExtResource("1_kyvah")
 metadata/_custom_type_script = "uid://cnin7pfpq1hgb"
 

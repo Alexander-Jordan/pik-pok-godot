@@ -2,16 +2,7 @@ class_name GridTraveller extends Node2D
 
 @export var grid: Grid2D = null
 @export var speed: int = 50
-
-@onready var tile: Vector2i = Vector2i.ZERO if grid == null else grid.get_tile_from_coords(global_position):
-	set(t):
-		if t == tile:
-			return
-		tile = t
-		tile_direction_next = calculate_tile_direction_next()
-
-var coords_move_to: Vector2i = global_position
-var tile_direction: Vector2i = Vector2i.ZERO:
+@export var tile_direction: Vector2i = Vector2i.ZERO:
 	set(td):
 		if ![Vector2i.ZERO, Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT].has(td):
 			return
@@ -21,6 +12,7 @@ var tile_direction: Vector2i = Vector2i.ZERO:
 			return
 		
 		tile_direction = td
+		tile_direction_changed.emit(td)
 		
 		if tile.x + td.x == grid.tiles_x + 2:
 			tile.x = -2
@@ -30,7 +22,18 @@ var tile_direction: Vector2i = Vector2i.ZERO:
 			global_position = grid.get_coords_from_tile(tile)
 		
 		coords_move_to = grid.get_coords_from_tile(tile + td)
+
+@onready var tile: Vector2i = Vector2i.ZERO if grid == null else grid.get_tile_from_coords(global_position):
+	set(t):
+		if t == tile:
+			return
+		tile = t
+		tile_direction_next = calculate_tile_direction_next()
+
+var coords_move_to: Vector2i = global_position
 var tile_direction_next: Vector2i = Vector2i.ZERO
+
+signal tile_direction_changed(tile_direction: Vector2i)
 
 func _process(_delta: float) -> void:
 	if global_position == Vector2(coords_move_to):
