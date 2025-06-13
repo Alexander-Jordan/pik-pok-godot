@@ -104,3 +104,38 @@ modulate = Color(1, 1, 0, 1)
 layout_mode = 2
 texture = SubResource("AtlasTexture_no1gd")
 flip_h = true
+
+[node name="texturerect_life_4" type="TextureRect" parent="VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer"]
+visible = false
+modulate = Color(1, 1, 0, 1)
+layout_mode = 2
+texture = SubResource("AtlasTexture_no1gd")
+flip_h = true
+
+[node name="texturerect_life_5" type="TextureRect" parent="VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer"]
+visible = false
+modulate = Color(1, 1, 0, 1)
+layout_mode = 2
+texture = SubResource("AtlasTexture_no1gd")
+flip_h = true
+
+[node name="texturerect_life_6" type="TextureRect" parent="VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer"]
+visible = false
+modulate = Color(1, 1, 0, 1)
+layout_mode = 2
+texture = SubResource("AtlasTexture_no1gd")
+flip_h = true
+
+[node name="texturerect_life_7" type="TextureRect" parent="VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer"]
+visible = false
+modulate = Color(1, 1, 0, 1)
+layout_mode = 2
+texture = SubResource("AtlasTexture_no1gd")
+flip_h = true
+
+[node name="texturerect_life_8" type="TextureRect" parent="VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer"]
+visible = false
+modulate = Color(1, 1, 0, 1)
+layout_mode = 2
+texture = SubResource("AtlasTexture_no1gd")
+flip_h = true

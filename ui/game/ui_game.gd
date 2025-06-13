@@ -5,12 +5,28 @@ class_name UIGame extends Control
 @onready var texturerect_life_1: TextureRect = $VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer/texturerect_life_1
 @onready var texturerect_life_2: TextureRect = $VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer/texturerect_life_2
 @onready var texturerect_life_3: TextureRect = $VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer/texturerect_life_3
+@onready var texturerect_life_4: TextureRect = $VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer/texturerect_life_4
+@onready var texturerect_life_5: TextureRect = $VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer/texturerect_life_5
+@onready var texturerect_life_6: TextureRect = $VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer/texturerect_life_6
+@onready var texturerect_life_7: TextureRect = $VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer/texturerect_life_7
+@onready var texturerect_life_8: TextureRect = $VBoxContainer/hboxcontainer_bottom/margincontainer_lives/HBoxContainer/texturerect_life_8
 
 func _ready() -> void:
+	GM.lives_changed.connect(on_lives_changed)
 	SS.stats.highscore_changed.connect(on_hichscore_changed)
 	SS.stats.score_changed.connect(on_score_changed)
 	
 	label_highscore.text = "%02d" % SS.stats.highscore
+
+func on_lives_changed(lives: int) -> void:
+	texturerect_life_1.visible = lives >= 1
+	texturerect_life_2.visible = lives >= 2
+	texturerect_life_3.visible = lives >= 3
+	texturerect_life_4.visible = lives >= 4
+	texturerect_life_5.visible = lives >= 5
+	texturerect_life_6.visible = lives >= 6
+	texturerect_life_7.visible = lives >= 7
+	texturerect_life_8.visible = lives >= 8
 
 func on_hichscore_changed(highscore: int) -> void:
 	print(highscore)
