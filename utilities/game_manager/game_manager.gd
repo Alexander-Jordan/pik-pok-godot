@@ -12,9 +12,14 @@ var mode: Mode = Mode.NONE:
 			return
 		mode = m
 		mode_changed.emit(m)
+		if m == Mode.PLAYING:
+			SS.stats.score = 0
 
 signal mode_changed(mode: Mode)
 signal reset
+
+func _ready() -> void:
+	reset.connect(on_reset)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed('dev_mode_none'):
@@ -25,4 +30,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		mode = Mode.OVER
 	if event.is_action_pressed('dev_reset'):
 		reset.emit()
-		mode = Mode.NONE
+
+func on_reset() -> void:
+	mode = Mode.NONE
+	SS.stats.score = 0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://bacrx2nx2m1ed"]
+[gd_scene load_steps=22 format=4 uid="uid://bacrx2nx2m1ed"]
 
 [ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="1_6almw"]
 [ext_resource type="Script" uid="uid://7jp8awjtagrf" path="res://utilities/grid_2d/grid_2d.gd" id="1_60rri"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bfdww3k002drj" path="res://entities/pacdot/pacdot_spawner.gd" id="4_j6wwd"]
 [ext_resource type="PackedScene" uid="uid://ctq53hs60mtf5" path="res://entities/pacdot/pacdot.tscn" id="5_usqqw"]
 [ext_resource type="PackedScene" uid="uid://r8jmwj18bytq" path="res://entities/pacdot/power_pellet/power_pellet.tscn" id="6_woy08"]
+[ext_resource type="PackedScene" uid="uid://b6xioh2e6t3du" path="res://ui/game/ui_game.tscn" id="7_4vbm2"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_60rri"]
 tile_data = PackedInt32Array(0, 0, 9, 65536, 0, 10, 131072, 0, 11, 1, 65536, 9, 65537, 65536, 10, 131073, 65536, 11, 2, 65536, 9, 65538, 65536, 10, 131074, 65536, 11, 3, 65536, 9, 65539, 65536, 10, 131075, 65536, 11, 4, 131072, 9, 65540, 131072, 10, 131076, 131072, 11)
@@ -174,3 +175,7 @@ metadata/_custom_type_script = "uid://bfdww3k002drj"
 [node name="TileMapLayer" type="TileMapLayer" parent="PowerPelletSpawner"]
 tile_map_data = PackedByteArray("AAABAAYAAAAAAAgAAAAaAAYAAAAAAAgAAAABABoAAAAAAAgAAAAaABoAAAAAAAgAAAA=")
 tile_set = SubResource("TileSet_4vbm2")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UIGame" parent="CanvasLayer" instance=ExtResource("7_4vbm2")]
