@@ -9,14 +9,25 @@ var input_direction_map: Dictionary[String, Vector2i] = {
 	'down': Vector2i.DOWN,
 	'right': Vector2i.RIGHT,
 }
-
+var look_direction: Vector2i = Vector2.ZERO:
+	set(ld):
+		if ![Vector2i.ZERO, Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT].has(ld):
+			return
+		look_direction = ld
+		if ld == Vector2i.ZERO:
+			animated_sprite_2d.animation = 'default'
+			animated_sprite_2d.stop()
+		else:
+			animated_sprite_2d.look_at(position + Vector2(ld))
+			if !animated_sprite_2d.is_playing() or animated_sprite_2d.animation != 'default':
+				animated_sprite_2d.play('default')
 func _process(delta: float) -> void:
 	if GM.mode != GM.Mode.PLAYING:
 		return
 	
 	super(delta)
-	if global_position != Vector2(coords_move_to):
-		global_position = global_position.move_toward(coords_move_to,delta * speed)
+	if global_position != coords_move_to:
+		global_position = global_position.move_toward(coords_move_to, delta * speed)
 
 func _ready() -> void:
 	GM.mode_changed.connect(on_game_mode_changed)
@@ -26,7 +37,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	for direction in input_direction_map:
 		if event.is_action_pressed(direction):
 			tile_direction = input_direction_map[direction]
-	animated_sprite_2d.look_at(position + Vector2(tile_direction))
+			look_direction = tile_direction
 
 func on_game_mode_changed(mode: GM.Mode) -> void:
 	match mode:
@@ -34,12 +45,10 @@ func on_game_mode_changed(mode: GM.Mode) -> void:
 			start()
 
 func reset() -> void:
-	animated_sprite_2d.stop()
+	look_direction = Vector2i.ZERO
 	global_position = spawn_point
 	tile = grid.get_tile_from_coords(global_position)
-	tile_direction = Vector2i.ZERO
+	tile_direction = tile_direction_reset
 
 func start() -> void:
-	if tile_direction == Vector2i.ZERO:
-		tile_direction = Vector2i.RIGHT
-	animated_sprite_2d.play('default')
+	look_direction = tile_direction
