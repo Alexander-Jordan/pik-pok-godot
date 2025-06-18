@@ -20,6 +20,12 @@ var ghost_mode: GhostMode = GhostMode.SCATTER:
 			return
 		ghost_mode = gm
 		ghost_mode_changed.emit(gm)
+var level: int = 1:
+	set(l):
+		if l < 1 or l == level:
+			return
+		level = l
+		level_changed.emit(l)
 var lives: int = 3:
 	set(l):
 		if l < LIVES_MIN or l > LIVES_MAX or l == lives:
@@ -39,6 +45,7 @@ var mode: Mode = Mode.NONE:
 			SS.stats.score = 0
 
 signal ghost_mode_changed(ghost_mode: GhostMode)
+signal level_changed(level: int)
 signal lives_changed(lives: int)
 signal mode_changed(mode: Mode)
 signal reset
@@ -63,3 +70,4 @@ func _unhandled_input(event: InputEvent) -> void:
 func on_reset() -> void:
 	mode = Mode.NONE
 	SS.stats.score = 0
+	level = 1

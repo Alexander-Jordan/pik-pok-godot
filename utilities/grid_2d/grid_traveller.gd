@@ -2,7 +2,16 @@ class_name GridTraveller extends Node2D
 
 @export var grid: Grid2D = null
 @export var speed: int = 50
-@export var tile_direction: Vector2i = Vector2i.ZERO:
+@export var tile_direction_reset: Vector2i = Vector2i.ZERO
+
+@onready var tile: Vector2i = Vector2i.ZERO if grid == null else grid.get_tile_from_coords(global_position):
+	set(t):
+		if t == tile:
+			return
+		tile = t
+		tile_direction_next = calculate_tile_direction_next()
+@onready var coords_move_to: Vector2 = global_position
+@onready var tile_direction: Vector2i = tile_direction_reset:
 	set(td):
 		if ![Vector2i.ZERO, Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT].has(td):
 			return
@@ -22,30 +31,18 @@ class_name GridTraveller extends Node2D
 			global_position = grid.get_coords_from_tile(tile)
 		
 		coords_move_to = grid.get_coords_from_tile(tile + td)
-
-@onready var tile: Vector2i = Vector2i.ZERO if grid == null else grid.get_tile_from_coords(global_position):
-	set(t):
-		if t == tile:
-			return
-		tile = t
-		tile_direction_next = calculate_tile_direction_next()
-
-var coords_move_to: Vector2i = global_position
-var tile_direction_next: Vector2i = Vector2i.ZERO
+@onready var tile_direction_next: Vector2i = tile_direction
 
 signal tile_direction_changed(tile_direction: Vector2i)
 
 func _process(_delta: float) -> void:
-	if global_position == Vector2(coords_move_to):
-		tile_direction = tile_direction_next
-		return
-	
 	tile = grid.get_tile_from_coords(global_position)
+	if global_position == coords_move_to:
+		tile_direction = tile_direction_next
 
 func calculate_tile_direction_next() -> Vector2i:
 	if grid == null or tile_direction == Vector2i.ZERO:
 		return Vector2i.ZERO
-	
 	return tile_direction if is_tile_walkable(tile + tile_direction) else Vector2i.ZERO
 
 func is_tile_walkable(t: Vector2i) -> bool:

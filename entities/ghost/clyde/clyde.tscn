@@ -79,8 +79,8 @@ animations = [{
 [node name="Clyde" type="Node2D"]
 z_index = 2
 script = ExtResource("1_85tpo")
+house_state_reset = 3
 tile_target_scatter = Vector2i(0, 35)
-tile_direction = Vector2i(0, -1)
 metadata/_custom_type_script = "uid://d4a050qjvgy1n"
 
 [node name="animatedsprite2d_body" type="AnimatedSprite2D" parent="."]
@@ -91,3 +91,6 @@ autoplay = "default"
 [node name="animatedsprite2d_eyes" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fwp5q")
 animation = &"up"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 14.0

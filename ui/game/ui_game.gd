@@ -29,7 +29,6 @@ func on_lives_changed(lives: int) -> void:
 	texturerect_life_8.visible = lives >= 8
 
 func on_hichscore_changed(highscore: int) -> void:
-	print(highscore)
 	label_highscore.text = "%02d" % highscore
 
 func on_score_changed(score: int) -> void:

@@ -1,3 +1,4 @@
 class_name Blinky extends Ghost
 
-@export var pacman: Pacman
+func get_tile_target_during_chase() -> Vector2i:
+	return pacman.tile
