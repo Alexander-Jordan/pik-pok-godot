@@ -62,7 +62,7 @@ var house_state: HouseState = house_state_reset:
 		house_state = hs
 		match hs:
 			HouseState.WAITING:
-				if timer_house:
+				if timer_house and GM.mode == GM.Mode.PLAYING:
 					timer_house.start()
 var house_target_point: Vector2 = Vector2.ZERO:
 	set(htp):
@@ -224,6 +224,8 @@ func on_game_mode_changed(m: GM.Mode) -> void:
 	match m:
 		GM.Mode.PLAYING:
 			start()
+			if house_state == HouseState.WAITING:
+				timer_house.start()
 
 func on_ghost_frighten_time(time: float) -> void:
 	if house_state != HouseState.NONE or eaten:
