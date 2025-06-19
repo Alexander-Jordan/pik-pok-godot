@@ -26,6 +26,7 @@ func _process(delta: float) -> void:
 		return
 	
 	super(delta)
+	get_input()
 	if global_position != coords_move_to:
 		global_position = global_position.move_toward(coords_move_to, delta * speed)
 
@@ -33,9 +34,9 @@ func _ready() -> void:
 	GM.mode_changed.connect(on_game_mode_changed)
 	GM.reset.connect(reset)
 
-func _unhandled_input(event: InputEvent) -> void:
+func get_input() -> void:
 	for direction in input_direction_map:
-		if event.is_action_pressed(direction):
+		if Input.is_action_pressed(direction):
 			tile_direction = input_direction_map[direction]
 			look_direction = tile_direction
 
