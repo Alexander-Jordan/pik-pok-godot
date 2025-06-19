@@ -1,6 +1,7 @@
 class_name Pacman extends GridTraveller
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var collectable_2d: Collectable2D = $Collectable2D
 @onready var collector_2d: Collector2D = $Collector2D
 @onready var spawn_point: Vector2 = global_position
 
@@ -36,9 +37,10 @@ func _process(delta: float) -> void:
 		global_position = global_position.move_toward(coords_move_to, delta * speed)
 
 func _ready() -> void:
-	collector_2d.collected.connect(on_collected)
+	collectable_2d.collected.connect(on_collectable_collected)
+	collector_2d.collected.connect(on_collector_collected)
 	GM.mode_changed.connect(on_game_mode_changed)
-	GM.reset.connect(reset)
+	GM.reset.connect(on_reset)
 
 func get_input() -> void:
 	for direction in input_direction_map:
@@ -55,7 +57,10 @@ func get_speed() -> float:
 		_:
 			return speed * 0.9
 
-func on_collected(collectable: Collectable2D) -> void:
+func on_collectable_collected() -> void:
+	GM.mode = GM.Mode.DEATH
+
+func on_collector_collected(collectable: Collectable2D) -> void:
 	match collectable.identifier:
 		'pacdot', 'power_pellet':
 			# skip 1 frame everytime a pacdot is collected
@@ -65,12 +70,18 @@ func on_game_mode_changed(mode: GM.Mode) -> void:
 	match mode:
 		GM.Mode.PLAYING:
 			start()
+		GM.Mode.DEATH:
+			animated_sprite_2d.pause()
+			await get_tree().create_timer(1.0).timeout
+			animated_sprite_2d.play('death')
+			await animated_sprite_2d.animation_finished
+			GM.lives -= 1
 
-func reset() -> void:
-	look_direction = Vector2i.ZERO
+func on_reset(_type: GM.ResetType) -> void:
 	global_position = spawn_point
 	tile = grid.get_tile_from_coords(global_position)
 	tile_direction = tile_direction_reset
+	look_direction = tile_direction
 
 func start() -> void:
 	look_direction = tile_direction

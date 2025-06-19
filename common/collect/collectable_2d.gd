@@ -3,10 +3,11 @@ extends Area2D
 ## A simple component to make anything a collectable.
 
 #region VARIABLES
-## The identifier for this collectable.
-@export var identifier: String = ''
 ## The audio stream to be played when this collectable is collected.
 @export var audio_streams: Array[AudioStream] = []
+@export var disabled: bool = false
+## The identifier for this collectable.
+@export var identifier: String = ''
 
 ## The collision shape for the collectable.
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
@@ -20,6 +21,8 @@ signal collected
 #region FUNCTIONS
 ## To be called by a collector when this collectable is to be collected.
 func collect() -> void:
+	if disabled:
+		return
 	collected.emit()
 
 ## To be called by a collector that plays an audio when this collectable is collected.

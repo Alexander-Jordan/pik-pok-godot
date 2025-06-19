@@ -49,8 +49,9 @@ var frighten: bool = false:
 		frighten = f
 		animatedsprite_2d_frightened.visible = f
 		animatedsprite_2d_body.visible = !f
-		collectable_2d.collision_shape_2d.set_deferred('disabled', !f)
-		collector_2d.collision_shape_2d.set_deferred('disabled', f)
+		collectable_2d.disabled = !f
+		if !eaten:
+			collector_2d.disabled = f
 		points = POINTS_DEFAULT
 		if f:
 			tile_direction = -tile_direction
@@ -86,6 +87,8 @@ var eaten: bool = false:
 		if e:
 			SS.stats.score += points
 			SS.stats.ghosts_eaten += 1
+		else:
+			collector_2d.disabled = false
 		# to keep things simple, just always set frighten to false at this point
 		frighten = false
 		animatedsprite_2d_body.visible = !e
@@ -134,7 +137,7 @@ func _ready() -> void:
 	collectable_2d.collected.connect(on_collected)
 	GM.ghost_frighten_time.connect(on_ghost_frighten_time)
 	GM.mode_changed.connect(on_game_mode_changed)
-	GM.reset.connect(reset)
+	GM.reset.connect(on_reset)
 	SS.stats.ghosts_eaten_changed.connect(on_ghosts_eaten_changed)
 	tile_direction_changed.connect(on_tile_direction_changed)
 	timer_frighten.timeout.connect(on_timer_frighten_timeout)
@@ -258,6 +261,11 @@ func on_game_mode_changed(m: GM.Mode) -> void:
 			start()
 			if house_state == HouseState.WAITING:
 				timer_house.start()
+		GM.Mode.DEATH:
+			await get_tree().create_timer(1.0).timeout
+			animatedsprite_2d_body.hide()
+			animatedsprite_2d_eyes.hide()
+			animatedsprite_2d_frightened.hide()
 
 func on_ghost_frighten_time(time: float) -> void:
 	if eaten:
@@ -294,7 +302,9 @@ func start() -> void:
 	if house_state == HouseState.WAITING:
 		timer_house.start()
 
-func reset() -> void:
+func on_reset(_type: GM.ResetType) -> void:
+	animatedsprite_2d_body.show()
+	animatedsprite_2d_eyes.show()
 	frighten = false
 	eaten = false
 	global_position = spawn_point

@@ -10,7 +10,13 @@ enum GhostMode {
 enum Mode {
 	NONE,
 	PLAYING,
+	DEATH,
 	OVER,
+}
+enum ResetType {
+	GAME,
+	LEVEL,
+	LIFE,
 }
 
 var ghost_mode: GhostMode = GhostMode.SCATTER:
@@ -32,7 +38,11 @@ var lives: int = 3:
 		lives = l
 		lives_changed.emit(l)
 		
-		if l == LIVES_MIN:
+		if l > LIVES_MIN:
+			reset.emit(ResetType.LIFE)
+			await get_tree().create_timer(1.0).timeout
+			mode = Mode.PLAYING
+		else:
 			mode = Mode.OVER
 var mode: Mode = Mode.NONE:
 	set(m):
@@ -48,7 +58,7 @@ signal ghost_frighten_time(time: float)
 signal level_changed(level: int)
 signal lives_changed(lives: int)
 signal mode_changed(mode: Mode)
-signal reset
+signal reset(type: ResetType)
 
 func _ready() -> void:
 	reset.connect(on_reset)
@@ -68,10 +78,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		mode = Mode.PLAYING
 	if event.is_action_pressed('dev_mode_over'):
 		mode = Mode.OVER
-	if event.is_action_pressed('dev_reset'):
-		reset.emit()
+	if event.is_action_pressed('dev_reset_level'):
+		reset.emit(ResetType.LEVEL)
+	elif event.is_action_pressed('dev_reset_game'):
+		reset.emit(ResetType.GAME)
 
-func on_reset() -> void:
+func on_reset(type: ResetType) -> void:
+	if type == ResetType.LIFE:
+		return
 	mode = Mode.NONE
-	SS.stats.score = 0
-	level = 1
+	if type == ResetType.GAME:
+		level = 1
+		SS.stats.score = 0

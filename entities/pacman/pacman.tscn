@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://y1pp0axcp1s0"]
+[gd_scene load_steps=21 format=3 uid="uid://y1pp0axcp1s0"]
 
 [ext_resource type="Script" uid="uid://cnin7pfpq1hgb" path="res://entities/pacman/pacman.gd" id="1_kyvah"]
 [ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="1_osiaf"]
 [ext_resource type="Script" uid="uid://crxmoyjq1vwwu" path="res://common/collect/collector_2d.gd" id="3_kyvah"]
+[ext_resource type="Script" uid="uid://cinn5yixd7nw6" path="res://common/collect/collectable_2d.gd" id="4_o0vqk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5am7l"]
 atlas = ExtResource("1_osiaf")
@@ -46,7 +47,7 @@ region = Rect2(32, 48, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l21v4"]
 atlas = ExtResource("1_osiaf")
-region = Rect2(48, 48, 16, 16)
+region = Rect2(112, 112, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gsn73"]
 atlas = ExtResource("1_osiaf")
@@ -111,6 +112,9 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_hit3b"]
+radius = 4.0
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_o0vqk"]
 radius = 4.12311
 
@@ -122,6 +126,14 @@ metadata/_custom_type_script = "uid://cnin7pfpq1hgb"
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 1, 0, 1)
 sprite_frames = SubResource("SpriteFrames_r3pmm")
+
+[node name="Collectable2D" type="Area2D" parent="."]
+script = ExtResource("4_o0vqk")
+identifier = "pacman"
+metadata/_custom_type_script = "uid://cinn5yixd7nw6"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collectable2D"]
+shape = SubResource("CircleShape2D_hit3b")
 
 [node name="Collector2D" type="Area2D" parent="."]
 script = ExtResource("3_kyvah")
