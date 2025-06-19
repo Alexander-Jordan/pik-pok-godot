@@ -6,7 +6,6 @@ const LIVES_MAX: int = 8
 enum GhostMode {
 	CHASE,
 	SCATTER,
-	FRIGHTENED,
 }
 enum Mode {
 	NONE,
@@ -45,6 +44,7 @@ var mode: Mode = Mode.NONE:
 			SS.stats.score = 0
 
 signal ghost_mode_changed(ghost_mode: GhostMode)
+signal ghost_frightened_changed(frightened: bool)
 signal level_changed(level: int)
 signal lives_changed(lives: int)
 signal mode_changed(mode: Mode)
@@ -54,6 +54,10 @@ func _ready() -> void:
 	reset.connect(on_reset)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed('dev_frightened_false'):
+		ghost_frightened_changed.emit(false)
+	elif event.is_action_pressed('dev_frightened_true'):
+		ghost_frightened_changed.emit(true)
 	if event.is_action_pressed('dev_lives_decrease'):
 		lives -= 1
 	elif event.is_action_pressed('dev_lives_increase'):

@@ -32,9 +32,23 @@ const DIRECTION_MAP: Dictionary[String, Vector2i] = {
 
 @onready var animatedsprite_2d_body: AnimatedSprite2D = $animatedsprite2d_body
 @onready var animatedsprite_2d_eyes: AnimatedSprite2D = $animatedsprite2d_eyes
+@onready var animatedsprite_2d_frightened: AnimatedSprite2D = $animatedsprite2d_frightened
+@onready var collectable_2d: Collectable2D = $Collectable2D
+@onready var collector_2d: Collector2D = $Collector2D
 @onready var spawn_point: Vector2 = global_position
 @onready var timer: Timer = $Timer
 
+var frighten: bool = false:
+	set(f):
+		if f == frighten:
+			return
+		frighten = f
+		animatedsprite_2d_frightened.visible = f
+		animatedsprite_2d_body.visible = !f
+		collectable_2d.collision_shape_2d.set_deferred('disabled', !f)
+		collector_2d.collision_shape_2d.set_deferred('disabled', f)
+		if f:
+			tile_direction = -tile_direction
 var house_state: HouseState = house_state_reset:
 	set(hs):
 		if !HouseState.values().has(hs) or hs == house_state:
@@ -62,13 +76,14 @@ var eaten: bool = false:
 		if e == eaten:
 			return
 		eaten = e
+		# to keep things simple, just always set frighten to false at this point
+		frighten = false
 		animatedsprite_2d_body.visible = !e
 var mode: GM.GhostMode = GM.ghost_mode:
 	set(m):
 		if !GM.GhostMode.values().has(m) or m == mode:
 			return
-		if mode != GM.GhostMode.FRIGHTENED:
-			tile_direction = -tile_direction
+		tile_direction = -tile_direction
 		mode = m
 var tile_target: Vector2i = Vector2i.ZERO:
 	set(tt):
@@ -99,6 +114,8 @@ func _process(delta: float) -> void:
 				house_state = HouseState.GOING_IN
 
 func _ready() -> void:
+	collectable_2d.collected.connect(on_collected)
+	GM.ghost_frightened_changed.connect(on_frightened_changed)
 	GM.mode_changed.connect(on_game_mode_changed)
 	GM.reset.connect(reset)
 	tile_direction_changed.connect(on_tile_direction_changed)
@@ -109,13 +126,17 @@ func _ready() -> void:
 	on_tile_direction_changed(tile_direction)
 
 func calculate_tile_direction_next() -> Vector2i:
+	if frighten:
+		return get_tile_direction_while_frightened()
+	if eaten:
+		tile_target = grid.get_tile_from_coords(house_entrance_point)
+		return get_tile_direction_next_from_tile_target()
+	
 	mode = GM.ghost_mode
 	if mode == GM.GhostMode.SCATTER:
 		tile_target = tile_target_scatter
 	if mode == GM.GhostMode.CHASE:
 		tile_target = get_tile_target_during_chase()
-	if eaten:
-		tile_target = grid.get_tile_from_coords(house_entrance_point)
 	return get_tile_direction_next_from_tile_target()
 
 func get_next_house_target_point() -> Vector2:
@@ -161,8 +182,34 @@ func get_tile_direction_next_from_tile_target() -> Vector2i:
 	# if no next tile direction was set: walk back as last resort
 	return next_tile_direction if next_tile_direction != Vector2i.ZERO else -tile_direction
 
+func get_tile_direction_while_frightened() -> Vector2i:
+	var directions_except_backwards = DIRECTION_MAP.values().filter(
+		func (d: Vector2i): return d != -tile_direction
+	)
+	
+	var random_direction = directions_except_backwards.pick_random()
+	if is_tile_walkable(tile + random_direction):
+		return random_direction
+	
+	for direction: Vector2i in DIRECTION_MAP.values():
+		# ignore the direction from which the ghost came from
+		if direction == -tile_direction:
+			continue
+		if is_tile_walkable(tile + direction):
+			return direction
+	# if no next tile direction was set: walk back as last resort
+	return -tile_direction
+
 func get_tile_target_during_chase() -> Vector2i:
 	return tile_target_scatter
+
+func on_collected() -> void:
+	eaten = true
+
+func on_frightened_changed(f: bool) -> void:
+	if house_state != HouseState.NONE or eaten:
+		return
+	frighten = f
 
 func on_game_mode_changed(m: GM.Mode) -> void:
 	match m:
@@ -182,8 +229,12 @@ func start() -> void:
 		timer.start()
 
 func reset() -> void:
+	frighten = false
+	eaten = false
 	global_position = spawn_point
 	house_state = house_state_reset
+	house_target_point = Vector2i.ZERO
 	tile = grid.get_tile_from_coords(global_position)
 	tile_direction = tile_direction_reset
+	tile_target = Vector2i.ZERO
 #endregion

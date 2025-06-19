@@ -7,6 +7,9 @@ extends Area2D
 @export var identifier: String = ''
 ## The audio stream to be played when this collectable is collected.
 @export var audio_streams: Array[AudioStream] = []
+
+## The collision shape for the collectable.
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 #endregion
 
 #region SIGNALS

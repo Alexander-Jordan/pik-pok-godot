@@ -195,6 +195,9 @@ tile_direction_reset = Vector2i(-1, 0)
 script = ExtResource("8_l7y0w")
 metadata/_custom_type_script = "uid://c7hvif5exm5pe"
 
+[node name="timer_frightened" type="Timer" parent="GhostManager"]
+wait_time = 10.0
+
 [node name="timer_mode" type="Timer" parent="GhostManager"]
 one_shot = true
 

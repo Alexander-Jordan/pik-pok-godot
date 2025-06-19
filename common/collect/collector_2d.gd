@@ -12,6 +12,10 @@ extends Area2D
 @onready var audio_stream_player_2d: AudioStreamPlayer2D = $AudioStreamPlayer2D
 #endregion
 
+#region SIGNALS
+signal collectable_collected(collectable: Collectable2D)
+#endregion
+
 #region FUNCTIONS
 func _ready() -> void:
 	area_entered.connect(func(area: Area2D):
@@ -19,6 +23,7 @@ func _ready() -> void:
 			if area.identifier in collectable_identifiers:
 				area.collect()
 				play_audio(area)
+				collectable_collected.emit(area)
 	)
 
 ## Used to play the audio fetched from the collectable when collected.

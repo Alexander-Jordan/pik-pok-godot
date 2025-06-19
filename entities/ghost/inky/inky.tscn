@@ -1,7 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://bxccev2ecvbjc"]
+[gd_scene load_steps=18 format=3 uid="uid://bxccev2ecvbjc"]
 
 [ext_resource type="Script" uid="uid://bhp54ekxbfuhf" path="res://entities/ghost/inky/inky.gd" id="1_ek2yr"]
 [ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="2_a1vqp"]
+[ext_resource type="Script" uid="uid://cinn5yixd7nw6" path="res://common/collect/collectable_2d.gd" id="3_6pej1"]
+[ext_resource type="Script" uid="uid://crxmoyjq1vwwu" path="res://common/collect/collector_2d.gd" id="4_g2qr4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qovne"]
 atlas = ExtResource("2_a1vqp")
@@ -76,6 +78,34 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_fdrnd"]
+atlas = ExtResource("2_a1vqp")
+region = Rect2(48, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r4ry4"]
+atlas = ExtResource("2_a1vqp")
+region = Rect2(64, 48, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ek2yr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fdrnd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r4ry4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g2qr4"]
+size = Vector2(6, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hk14h"]
+size = Vector2(6, 6)
+
 [node name="Inky" type="Node2D"]
 z_index = 2
 script = ExtResource("1_ek2yr")
@@ -92,5 +122,26 @@ autoplay = "default"
 sprite_frames = SubResource("SpriteFrames_fwp5q")
 animation = &"up"
 
+[node name="animatedsprite2d_frightened" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = SubResource("SpriteFrames_ek2yr")
+
 [node name="Timer" type="Timer" parent="."]
 wait_time = 7.0
+
+[node name="Collectable2D" type="Area2D" parent="."]
+script = ExtResource("3_6pej1")
+identifier = "ghost"
+metadata/_custom_type_script = "uid://cinn5yixd7nw6"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collectable2D"]
+shape = SubResource("RectangleShape2D_g2qr4")
+disabled = true
+
+[node name="Collector2D" type="Area2D" parent="."]
+script = ExtResource("4_g2qr4")
+collectable_identifiers = Array[String](["pacman"])
+metadata/_custom_type_script = "uid://crxmoyjq1vwwu"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collector2D"]
+shape = SubResource("RectangleShape2D_hk14h")
