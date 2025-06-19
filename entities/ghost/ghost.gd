@@ -16,6 +16,8 @@ const DIRECTION_MAP: Dictionary[String, Vector2i] = {
 	'down': Vector2i.DOWN,
 	'right': Vector2i.RIGHT,
 }
+
+const POINTS_DEFAULT: int = 200
 #endregion
 
 #region VARIABLES
@@ -47,6 +49,7 @@ var frighten: bool = false:
 		animatedsprite_2d_body.visible = !f
 		collectable_2d.collision_shape_2d.set_deferred('disabled', !f)
 		collector_2d.collision_shape_2d.set_deferred('disabled', f)
+		points = POINTS_DEFAULT
 		if f:
 			tile_direction = -tile_direction
 var house_state: HouseState = house_state_reset:
@@ -76,6 +79,8 @@ var eaten: bool = false:
 		if e == eaten:
 			return
 		eaten = e
+		SS.stats.score += points
+		SS.stats.ghosts_eaten += 1
 		# to keep things simple, just always set frighten to false at this point
 		frighten = false
 		animatedsprite_2d_body.visible = !e
@@ -85,6 +90,7 @@ var mode: GM.GhostMode = GM.ghost_mode:
 			return
 		tile_direction = -tile_direction
 		mode = m
+var points: int = POINTS_DEFAULT
 var tile_target: Vector2i = Vector2i.ZERO:
 	set(tt):
 		if tt == tile_target:
@@ -118,6 +124,7 @@ func _ready() -> void:
 	GM.ghost_frightened_changed.connect(on_frightened_changed)
 	GM.mode_changed.connect(on_game_mode_changed)
 	GM.reset.connect(reset)
+	SS.stats.ghosts_eaten_changed.connect(on_ghosts_eaten_changed)
 	tile_direction_changed.connect(on_tile_direction_changed)
 	timer.timeout.connect(on_timer_timeout)
 	
@@ -216,6 +223,10 @@ func on_game_mode_changed(m: GM.Mode) -> void:
 		GM.Mode.PLAYING:
 			start()
 
+func on_ghosts_eaten_changed(_ge: int) -> void:
+	if !eaten and frighten:
+		points *= 2
+
 func on_tile_direction_changed(td: Vector2i) -> void:
 	if DIRECTION_MAP.values().has(td):
 		animatedsprite_2d_eyes.play(DIRECTION_MAP.find_key(td))
@@ -234,6 +245,7 @@ func reset() -> void:
 	global_position = spawn_point
 	house_state = house_state_reset
 	house_target_point = Vector2i.ZERO
+	points = POINTS_DEFAULT
 	tile = grid.get_tile_from_coords(global_position)
 	tile_direction = tile_direction_reset
 	tile_target = Vector2i.ZERO

@@ -4,6 +4,13 @@ class_name StatsData extends Resource
 #region VARIABLES
 ## How many times has the game been booted?
 @export var game_booted_count: int = 0
+## How many times has the a ghost been eaten?
+@export var ghosts_eaten: int = 0:
+	set(ge):
+		if ge < 0 or ge == ghosts_eaten:
+			return
+		ghosts_eaten = ge
+		ghosts_eaten_changed.emit(ge)
 ## The highest score set.
 @export var highscore: int = 0:
 	set(h):
@@ -23,6 +30,7 @@ class_name StatsData extends Resource
 		if s > highscore:
 			highscore = s
 
+signal ghosts_eaten_changed(chosts_eaten: int)
 signal highscore_changed(highscore: int)
 signal score_changed(score: int)
 #endregion
