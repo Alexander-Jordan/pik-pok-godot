@@ -29,20 +29,13 @@ var mode_index: int = 0:
 			_:
 				set_mode_and_duration(GM.GhostMode.CHASE, 0.0)
 
-@onready var timer_frightened: Timer = $timer_frightened
 @onready var timer_mode: Timer = $timer_mode
 
 func _ready() -> void:
-	GM.ghost_frightened_changed.connect(on_frightened_changed)
 	GM.level_changed.connect(on_level_changed)
 	GM.mode_changed.connect(on_game_mode_changed)
 	GM.reset.connect(on_reset)
-	timer_frightened.timeout.connect(on_timer_frightened_timeout)
 	timer_mode.timeout.connect(on_timer_mode_timeout)
-
-func on_frightened_changed(f: bool) -> void:
-	if f:
-		timer_frightened.start()
 
 func on_game_mode_changed(mode: GM.Mode) -> void:
 	match mode:
@@ -54,9 +47,6 @@ func on_level_changed(_level: int) -> void:
 
 func on_reset() -> void:
 	mode_index = 0
-
-func on_timer_frightened_timeout() -> void:
-	GM.ghost_frightened_changed.emit(false)
 
 func on_timer_mode_timeout() -> void:
 	mode_index += 1

@@ -126,9 +126,6 @@ animation = &"up"
 visible = false
 sprite_frames = SubResource("SpriteFrames_ek2yr")
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 7.0
-
 [node name="Collectable2D" type="Area2D" parent="."]
 script = ExtResource("3_6pej1")
 identifier = "ghost"
@@ -145,3 +142,10 @@ metadata/_custom_type_script = "uid://crxmoyjq1vwwu"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collector2D"]
 shape = SubResource("RectangleShape2D_hk14h")
+
+[node name="timer_frighten" type="Timer" parent="."]
+one_shot = true
+
+[node name="timer_house" type="Timer" parent="."]
+wait_time = 7.0
+one_shot = true

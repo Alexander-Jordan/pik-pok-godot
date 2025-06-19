@@ -125,9 +125,6 @@ frame_progress = 0.971255
 visible = false
 sprite_frames = SubResource("SpriteFrames_vl8vr")
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.05
-
 [node name="Collectable2D" type="Area2D" parent="."]
 script = ExtResource("3_r4ry4")
 identifier = "ghost"
@@ -144,3 +141,10 @@ metadata/_custom_type_script = "uid://crxmoyjq1vwwu"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collector2D"]
 shape = SubResource("RectangleShape2D_wsxch")
+
+[node name="timer_frighten" type="Timer" parent="."]
+one_shot = true
+
+[node name="timer_house" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
