@@ -35,6 +35,7 @@ const POINTS_DEFAULT: int = 200
 @onready var animatedsprite_2d_body: AnimatedSprite2D = $animatedsprite2d_body
 @onready var animatedsprite_2d_eyes: AnimatedSprite2D = $animatedsprite2d_eyes
 @onready var animatedsprite_2d_frightened: AnimatedSprite2D = $animatedsprite2d_frightened
+@onready var area_2d_tunnel_trigger: Area2D = $area2d_tunnel_trigger
 @onready var collectable_2d: Collectable2D = $Collectable2D
 @onready var collector_2d: Collector2D = $Collector2D
 @onready var spawn_point: Vector2 = global_position
@@ -82,11 +83,13 @@ var eaten: bool = false:
 		if e == eaten:
 			return
 		eaten = e
-		SS.stats.score += points
-		SS.stats.ghosts_eaten += 1
+		if e:
+			SS.stats.score += points
+			SS.stats.ghosts_eaten += 1
 		# to keep things simple, just always set frighten to false at this point
 		frighten = false
 		animatedsprite_2d_body.visible = !e
+var in_tunnel: bool = false
 var mode: GM.GhostMode = GM.ghost_mode:
 	set(m):
 		if !GM.GhostMode.values().has(m) or m == mode:
@@ -126,6 +129,8 @@ func _process(delta: float) -> void:
 		animatedsprite_2d_frightened.play()
 
 func _ready() -> void:
+	area_2d_tunnel_trigger.area_entered.connect(on_tunnel_trigger_area_entered)
+	area_2d_tunnel_trigger.area_exited.connect(on_tunnel_trigger_area_exited)
 	collectable_2d.collected.connect(on_collected)
 	GM.ghost_frighten_time.connect(on_ghost_frighten_time)
 	GM.mode_changed.connect(on_game_mode_changed)
@@ -174,6 +179,33 @@ func get_next_house_target_point() -> Vector2:
 			var below: Vector2 = Vector2(house_waiting_point.x, house_waiting_point.y + 4)
 			return above if house_target_point != above else below
 	return Vector2.ZERO
+
+func get_speed() -> float:
+	if eaten:
+		return speed * 2.0
+	match GM.level:
+		1:
+			if in_tunnel:
+				return speed * 0.4
+			elif frighten:
+				return speed * 0.5 
+			return speed * 0.75
+		2, 3, 4:
+			if in_tunnel:
+				return speed * 0.45
+			elif frighten:
+				return speed * 0.55
+			return speed * 0.85
+		5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20:
+			if in_tunnel:
+				return speed * 0.5
+			elif frighten:
+				return speed * 0.6
+			return speed * 0.95
+		_:
+			if in_tunnel:
+				return speed * 0.5
+			return speed * 0.95
 
 func get_tile_direction_next_from_tile_target() -> Vector2i:
 	if grid == null:
@@ -228,7 +260,7 @@ func on_game_mode_changed(m: GM.Mode) -> void:
 				timer_house.start()
 
 func on_ghost_frighten_time(time: float) -> void:
-	if house_state != HouseState.NONE or eaten:
+	if eaten:
 		return
 	frighten = true
 	timer_frighten.start(time)
@@ -249,6 +281,14 @@ func on_timer_frighten_timeout() -> void:
 func on_timer_house_timeout() -> void:
 	if house_state == HouseState.WAITING:
 		house_state = HouseState.GOING_OUT
+
+func on_tunnel_trigger_area_entered(area: Area2D) -> void:
+	if area is Tunnel:
+		in_tunnel = true
+
+func on_tunnel_trigger_area_exited(area: Area2D) -> void:
+	if area is Tunnel:
+		in_tunnel = false
 
 func start() -> void:
 	if house_state == HouseState.WAITING:

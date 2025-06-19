@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bxccev2ecvbjc"]
+[gd_scene load_steps=19 format=3 uid="uid://bxccev2ecvbjc"]
 
 [ext_resource type="Script" uid="uid://bhp54ekxbfuhf" path="res://entities/ghost/inky/inky.gd" id="1_ek2yr"]
 [ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="2_a1vqp"]
@@ -100,6 +100,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2kw3t"]
+size = Vector2(6, 6)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2qr4"]
 size = Vector2(6, 6)
 
@@ -125,6 +128,11 @@ animation = &"up"
 [node name="animatedsprite2d_frightened" type="AnimatedSprite2D" parent="."]
 visible = false
 sprite_frames = SubResource("SpriteFrames_ek2yr")
+
+[node name="area2d_tunnel_trigger" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="area2d_tunnel_trigger"]
+shape = SubResource("RectangleShape2D_2kw3t")
 
 [node name="Collectable2D" type="Area2D" parent="."]
 script = ExtResource("3_6pej1")

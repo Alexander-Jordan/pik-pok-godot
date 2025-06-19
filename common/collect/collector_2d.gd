@@ -13,7 +13,7 @@ extends Area2D
 #endregion
 
 #region SIGNALS
-signal collectable_collected(collectable: Collectable2D)
+signal collected(collectable: Collectable2D)
 #endregion
 
 #region FUNCTIONS
@@ -23,7 +23,7 @@ func _ready() -> void:
 			if area.identifier in collectable_identifiers:
 				area.collect()
 				play_audio(area)
-				collectable_collected.emit(area)
+				collected.emit(area)
 	)
 
 ## Used to play the audio fetched from the collectable when collected.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b3ewmx1wg4myd"]
+[gd_scene load_steps=19 format=3 uid="uid://b3ewmx1wg4myd"]
 
 [ext_resource type="Script" uid="uid://dwrc6pppqhrdt" path="res://entities/ghost/blinky/blinky.gd" id="1_fdrnd"]
 [ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="2_r4ry4"]
@@ -100,6 +100,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xbyum"]
+size = Vector2(6, 6)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vl8vr"]
 size = Vector2(6, 6)
 
@@ -124,6 +127,11 @@ frame_progress = 0.971255
 [node name="animatedsprite2d_frightened" type="AnimatedSprite2D" parent="."]
 visible = false
 sprite_frames = SubResource("SpriteFrames_vl8vr")
+
+[node name="area2d_tunnel_trigger" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="area2d_tunnel_trigger"]
+shape = SubResource("RectangleShape2D_xbyum")
 
 [node name="Collectable2D" type="Area2D" parent="."]
 script = ExtResource("3_r4ry4")

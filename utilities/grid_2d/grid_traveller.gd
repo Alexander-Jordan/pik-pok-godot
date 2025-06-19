@@ -1,7 +1,8 @@
 class_name GridTraveller extends Node2D
 
 @export var grid: Grid2D = null
-@export var speed: int = 50
+@export var speed: float = 75.75:
+	get = get_speed
 @export var tile_direction_reset: Vector2i = Vector2i.ZERO
 
 @onready var tile: Vector2i = Vector2i.ZERO if grid == null else grid.get_tile_from_coords(global_position):
@@ -39,6 +40,9 @@ func _process(_delta: float) -> void:
 	tile = grid.get_tile_from_coords(global_position)
 	if global_position == coords_move_to:
 		tile_direction = tile_direction_next
+
+func get_speed() -> float:
+	return speed
 
 func calculate_tile_direction_next() -> Vector2i:
 	if grid == null or tile_direction == Vector2i.ZERO:
