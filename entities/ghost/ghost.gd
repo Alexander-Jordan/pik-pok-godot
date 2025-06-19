@@ -16,6 +16,8 @@ const DIRECTION_MAP: Dictionary[String, Vector2i] = {
 	'down': Vector2i.DOWN,
 	'right': Vector2i.RIGHT,
 }
+const FRIGHTEN_ALMOST_OVER_TIME: float = 2.0
+const POINTS_DEFAULT: int = 200
 #endregion
 
 #region VARIABLES
@@ -32,9 +34,28 @@ const DIRECTION_MAP: Dictionary[String, Vector2i] = {
 
 @onready var animatedsprite_2d_body: AnimatedSprite2D = $animatedsprite2d_body
 @onready var animatedsprite_2d_eyes: AnimatedSprite2D = $animatedsprite2d_eyes
+@onready var animatedsprite_2d_frightened: AnimatedSprite2D = $animatedsprite2d_frightened
+@onready var area_2d_tunnel_trigger: Area2D = $area2d_tunnel_trigger
+@onready var collectable_2d: Collectable2D = $Collectable2D
+@onready var collector_2d: Collector2D = $Collector2D
 @onready var spawn_point: Vector2 = global_position
-@onready var timer: Timer = $Timer
+@onready var timer_frighten: Timer = $timer_frighten
+@onready var timer_house: Timer = $timer_house
 
+var frighten: bool = false:
+	set(f):
+		if f == frighten:
+			return
+		frighten = f
+		animatedsprite_2d_frightened.visible = f
+		animatedsprite_2d_body.visible = !f
+		collectable_2d.collision_shape_2d.set_deferred('disabled', !f)
+		collector_2d.collision_shape_2d.set_deferred('disabled', f)
+		points = POINTS_DEFAULT
+		if f:
+			tile_direction = -tile_direction
+		if animatedsprite_2d_frightened.is_playing():
+			animatedsprite_2d_frightened.stop()
 var house_state: HouseState = house_state_reset:
 	set(hs):
 		if !HouseState.values().has(hs) or hs == house_state:
@@ -42,8 +63,8 @@ var house_state: HouseState = house_state_reset:
 		house_state = hs
 		match hs:
 			HouseState.WAITING:
-				if timer:
-					timer.start()
+				if timer_house and GM.mode == GM.Mode.PLAYING:
+					timer_house.start()
 var house_target_point: Vector2 = Vector2.ZERO:
 	set(htp):
 		house_target_point = htp
@@ -62,14 +83,20 @@ var eaten: bool = false:
 		if e == eaten:
 			return
 		eaten = e
+		if e:
+			SS.stats.score += points
+			SS.stats.ghosts_eaten += 1
+		# to keep things simple, just always set frighten to false at this point
+		frighten = false
 		animatedsprite_2d_body.visible = !e
+var in_tunnel: bool = false
 var mode: GM.GhostMode = GM.ghost_mode:
 	set(m):
 		if !GM.GhostMode.values().has(m) or m == mode:
 			return
-		if mode != GM.GhostMode.FRIGHTENED:
-			tile_direction = -tile_direction
+		tile_direction = -tile_direction
 		mode = m
+var points: int = POINTS_DEFAULT
 var tile_target: Vector2i = Vector2i.ZERO:
 	set(tt):
 		if tt == tile_target:
@@ -97,25 +124,38 @@ func _process(delta: float) -> void:
 		if eaten:
 			if tile == grid.get_tile_from_coords(house_entrance_point):
 				house_state = HouseState.GOING_IN
+	
+	if frighten and timer_frighten.time_left <= FRIGHTEN_ALMOST_OVER_TIME and !animatedsprite_2d_frightened.is_playing():
+		animatedsprite_2d_frightened.play()
 
 func _ready() -> void:
+	area_2d_tunnel_trigger.area_entered.connect(on_tunnel_trigger_area_entered)
+	area_2d_tunnel_trigger.area_exited.connect(on_tunnel_trigger_area_exited)
+	collectable_2d.collected.connect(on_collected)
+	GM.ghost_frighten_time.connect(on_ghost_frighten_time)
 	GM.mode_changed.connect(on_game_mode_changed)
 	GM.reset.connect(reset)
+	SS.stats.ghosts_eaten_changed.connect(on_ghosts_eaten_changed)
 	tile_direction_changed.connect(on_tile_direction_changed)
-	timer.timeout.connect(on_timer_timeout)
+	timer_frighten.timeout.connect(on_timer_frighten_timeout)
+	timer_house.timeout.connect(on_timer_house_timeout)
 	
 	coords_move_to = grid.get_coords_from_tile(tile + tile_direction)
 	house_state = house_state_reset
 	on_tile_direction_changed(tile_direction)
 
 func calculate_tile_direction_next() -> Vector2i:
+	if frighten:
+		return get_tile_direction_while_frightened()
+	if eaten:
+		tile_target = grid.get_tile_from_coords(house_entrance_point)
+		return get_tile_direction_next_from_tile_target()
+	
 	mode = GM.ghost_mode
 	if mode == GM.GhostMode.SCATTER:
 		tile_target = tile_target_scatter
 	if mode == GM.GhostMode.CHASE:
 		tile_target = get_tile_target_during_chase()
-	if eaten:
-		tile_target = grid.get_tile_from_coords(house_entrance_point)
 	return get_tile_direction_next_from_tile_target()
 
 func get_next_house_target_point() -> Vector2:
@@ -140,6 +180,33 @@ func get_next_house_target_point() -> Vector2:
 			return above if house_target_point != above else below
 	return Vector2.ZERO
 
+func get_speed() -> float:
+	if eaten:
+		return speed * 2.0
+	match GM.level:
+		1:
+			if in_tunnel:
+				return speed * 0.4
+			elif frighten:
+				return speed * 0.5 
+			return speed * 0.75
+		2, 3, 4:
+			if in_tunnel:
+				return speed * 0.45
+			elif frighten:
+				return speed * 0.55
+			return speed * 0.85
+		5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20:
+			if in_tunnel:
+				return speed * 0.5
+			elif frighten:
+				return speed * 0.6
+			return speed * 0.95
+		_:
+			if in_tunnel:
+				return speed * 0.5
+			return speed * 0.95
+
 func get_tile_direction_next_from_tile_target() -> Vector2i:
 	if grid == null:
 		return Vector2i.ZERO
@@ -161,29 +228,80 @@ func get_tile_direction_next_from_tile_target() -> Vector2i:
 	# if no next tile direction was set: walk back as last resort
 	return next_tile_direction if next_tile_direction != Vector2i.ZERO else -tile_direction
 
+func get_tile_direction_while_frightened() -> Vector2i:
+	var directions_except_backwards = DIRECTION_MAP.values().filter(
+		func (d: Vector2i): return d != -tile_direction
+	)
+	
+	var random_direction = directions_except_backwards.pick_random()
+	if is_tile_walkable(tile + random_direction):
+		return random_direction
+	
+	for direction: Vector2i in DIRECTION_MAP.values():
+		# ignore the direction from which the ghost came from
+		if direction == -tile_direction:
+			continue
+		if is_tile_walkable(tile + direction):
+			return direction
+	# if no next tile direction was set: walk back as last resort
+	return -tile_direction
+
 func get_tile_target_during_chase() -> Vector2i:
 	return tile_target_scatter
+
+func on_collected() -> void:
+	eaten = true
 
 func on_game_mode_changed(m: GM.Mode) -> void:
 	match m:
 		GM.Mode.PLAYING:
 			start()
+			if house_state == HouseState.WAITING:
+				timer_house.start()
+
+func on_ghost_frighten_time(time: float) -> void:
+	if eaten:
+		return
+	frighten = true
+	timer_frighten.start(time)
+	if animatedsprite_2d_frightened.is_playing():
+		animatedsprite_2d_frightened.stop()
+
+func on_ghosts_eaten_changed(_ge: int) -> void:
+	if !eaten and frighten:
+		points *= 2
 
 func on_tile_direction_changed(td: Vector2i) -> void:
 	if DIRECTION_MAP.values().has(td):
 		animatedsprite_2d_eyes.play(DIRECTION_MAP.find_key(td))
 
-func on_timer_timeout() -> void:
+func on_timer_frighten_timeout() -> void:
+	frighten = false
+
+func on_timer_house_timeout() -> void:
 	if house_state == HouseState.WAITING:
 		house_state = HouseState.GOING_OUT
 
+func on_tunnel_trigger_area_entered(area: Area2D) -> void:
+	if area is Tunnel:
+		in_tunnel = true
+
+func on_tunnel_trigger_area_exited(area: Area2D) -> void:
+	if area is Tunnel:
+		in_tunnel = false
+
 func start() -> void:
 	if house_state == HouseState.WAITING:
-		timer.start()
+		timer_house.start()
 
 func reset() -> void:
+	frighten = false
+	eaten = false
 	global_position = spawn_point
 	house_state = house_state_reset
+	house_target_point = Vector2i.ZERO
+	points = POINTS_DEFAULT
 	tile = grid.get_tile_from_coords(global_position)
 	tile_direction = tile_direction_reset
+	tile_target = Vector2i.ZERO
 #endregion

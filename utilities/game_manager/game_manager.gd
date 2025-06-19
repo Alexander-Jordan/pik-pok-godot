@@ -6,7 +6,6 @@ const LIVES_MAX: int = 8
 enum GhostMode {
 	CHASE,
 	SCATTER,
-	FRIGHTENED,
 }
 enum Mode {
 	NONE,
@@ -45,6 +44,7 @@ var mode: Mode = Mode.NONE:
 			SS.stats.score = 0
 
 signal ghost_mode_changed(ghost_mode: GhostMode)
+signal ghost_frighten_time(time: float)
 signal level_changed(level: int)
 signal lives_changed(lives: int)
 signal mode_changed(mode: Mode)
@@ -54,6 +54,10 @@ func _ready() -> void:
 	reset.connect(on_reset)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed('dev_ghost_frighten_time'):
+		ghost_frighten_time.emit(PowerPellet.get_time())
+	elif event.is_action_pressed('dev_ghost_frighten_time_default'):
+		ghost_frighten_time.emit(10.0)
 	if event.is_action_pressed('dev_lives_decrease'):
 		lives -= 1
 	elif event.is_action_pressed('dev_lives_increase'):
