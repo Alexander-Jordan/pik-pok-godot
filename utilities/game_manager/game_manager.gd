@@ -11,6 +11,7 @@ enum Mode {
 	NONE,
 	PLAYING,
 	DEATH,
+	WAIT,
 	OVER,
 }
 enum ResetType {
@@ -19,6 +20,13 @@ enum ResetType {
 	LIFE,
 }
 
+var dots_collected: int = 0:
+	set(dc):
+		if dots_collected < 0 or dc == dots_collected:
+			return
+		dots_collected = dc
+		if dc == 244:
+			level += 1
 var ghost_mode: GhostMode = GhostMode.SCATTER:
 	set(gm):
 		if !GhostMode.values().has(gm) or ghost_mode == gm:
@@ -31,6 +39,11 @@ var level: int = 1:
 			return
 		level = l
 		level_changed.emit(l)
+		
+		mode = Mode.WAIT
+		await get_tree().create_timer(2.0).timeout
+		reset.emit(ResetType.LEVEL)
+		mode = Mode.PLAYING
 var lives: int = 3:
 	set(l):
 		if l < LIVES_MIN or l > LIVES_MAX or l == lives:
@@ -50,8 +63,6 @@ var mode: Mode = Mode.NONE:
 			return
 		mode = m
 		mode_changed.emit(m)
-		if m == Mode.PLAYING:
-			SS.stats.score = 0
 
 signal ghost_mode_changed(ghost_mode: GhostMode)
 signal ghost_frighten_time(time: float)
@@ -86,6 +97,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func on_reset(type: ResetType) -> void:
 	if type == ResetType.LIFE:
 		return
+	dots_collected = 0
 	mode = Mode.NONE
 	if type == ResetType.GAME:
 		level = 1

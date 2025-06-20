@@ -121,6 +121,8 @@ radius = 4.12311
 [node name="Pacman" type="Node2D"]
 z_index = 1
 script = ExtResource("1_kyvah")
+speed = null
+tile_direction_reset = null
 metadata/_custom_type_script = "uid://cnin7pfpq1hgb"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
