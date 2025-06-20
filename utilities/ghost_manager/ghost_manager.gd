@@ -45,7 +45,7 @@ func on_game_mode_changed(mode: GM.Mode) -> void:
 func on_level_changed(_level: int) -> void:
 	mode_index = 0
 
-func on_reset() -> void:
+func on_reset(_type: GM.ResetType) -> void:
 	mode_index = 0
 
 func on_timer_mode_timeout() -> void:

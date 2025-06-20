@@ -5,6 +5,7 @@ extends Area2D
 #region VARIABLES
 ## The identifiers for the collectables this collector can collect.
 @export var collectable_identifiers: Array[String] = []
+@export var disabled: bool = false
 
 ## The collision shape for the collector.
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
@@ -19,8 +20,10 @@ signal collected(collectable: Collectable2D)
 #region FUNCTIONS
 func _ready() -> void:
 	area_entered.connect(func(area: Area2D):
+		if disabled:
+			return
 		if area is Collectable2D:
-			if area.identifier in collectable_identifiers:
+			if area.identifier in collectable_identifiers and !area.disabled:
 				area.collect()
 				play_audio(area)
 				collected.emit(area)
