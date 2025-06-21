@@ -89,6 +89,7 @@ var eaten: bool = false:
 		if e:
 			SS.stats.score += points
 			SS.stats.ghosts_eaten += 1
+			SS.save_stats()
 		else:
 			collector_2d.disabled = false
 		# to keep things simple, just always set frighten to false at this point

@@ -54,6 +54,8 @@ var level: int = 1:
 			return
 		level = l
 		level_changed.emit(l)
+		if mode == Mode.NONE:
+			return
 		
 		reset.emit(ResetType.LEVEL)
 		await get_tree().create_timer(1.0).timeout
@@ -114,6 +116,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		reset.emit(ResetType.GAME)
 
 func on_reset(type: ResetType) -> void:
+	SS.save_stats()
 	if type == ResetType.LIFE:
 		return
 	dots_collected = 0
