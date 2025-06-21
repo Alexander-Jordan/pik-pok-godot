@@ -112,13 +112,9 @@ size = Vector2(6, 6)
 [node name="Clyde" type="Node2D"]
 z_index = 2
 script = ExtResource("1_85tpo")
-house_center_point = null
-house_entrance_point = null
 house_state_reset = 3
-house_waiting_point = null
+spawn_point = Vector2(128, 140)
 tile_target_scatter = Vector2i(0, 35)
-speed = null
-tile_direction_reset = null
 metadata/_custom_type_script = "uid://d4a050qjvgy1n"
 
 [node name="animatedsprite2d_body" type="AnimatedSprite2D" parent="."]

@@ -112,13 +112,7 @@ size = Vector2(6, 6)
 [node name="Blinky" type="Node2D"]
 z_index = 2
 script = ExtResource("1_fdrnd")
-house_center_point = null
-house_entrance_point = null
-house_state_reset = null
-house_waiting_point = null
-tile_target_scatter = null
-speed = null
-tile_direction_reset = null
+spawn_point = Vector2(112, 116)
 metadata/_custom_type_script = "uid://dwrc6pppqhrdt"
 
 [node name="animatedsprite2d_body" type="AnimatedSprite2D" parent="."]

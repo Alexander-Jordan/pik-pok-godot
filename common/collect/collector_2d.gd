@@ -2,8 +2,15 @@ class_name Collector2D
 extends Area2D
 ## A simple component to make anything a collector.
 
+enum AudioOrder {
+	RANDOM,
+	DESCENDING,
+	ASCENDING
+}
+
 #region VARIABLES
 ## The identifiers for the collectables this collector can collect.
+@export var audio_order: AudioOrder = AudioOrder.RANDOM
 @export var collectable_identifiers: Array[String] = []
 @export var disabled: bool = false
 
@@ -31,7 +38,10 @@ func _ready() -> void:
 
 ## Used to play the audio fetched from the collectable when collected.
 func play_audio(collectable: Collectable2D) -> void:
-	audio_stream_player_2d.stream = collectable.get_audio()
+	if AudioOrder.RANDOM:
+		audio_stream_player_2d.stream = collectable.get_audio()
+	elif AudioOrder.DESCENDING:
+		audio_stream_player_2d.stream = collectable.get_next_audio(audio_stream_player_2d.stream)
 	if audio_stream_player_2d.stream != null:
 		audio_stream_player_2d.play()
 #endregion

@@ -8,6 +8,7 @@ var time: float = TIME_DEFAULT:
 
 func on_collected() -> void:
 	super()
+	GM.power_pellets_collected += 1
 	if time > 0.0:
 		GM.ghost_frighten_time.emit(time)
 

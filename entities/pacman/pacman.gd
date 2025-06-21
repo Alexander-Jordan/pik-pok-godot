@@ -59,6 +59,11 @@ func get_speed() -> float:
 
 func on_collectable_collected() -> void:
 	GM.mode = GM.Mode.DEATH
+	animated_sprite_2d.pause()
+	await get_tree().create_timer(1.0).timeout
+	animated_sprite_2d.play('death')
+	await animated_sprite_2d.animation_finished
+	GM.lives -= 1
 
 func on_collector_collected(collectable: Collectable2D) -> void:
 	match collectable.identifier:
@@ -69,19 +74,11 @@ func on_collector_collected(collectable: Collectable2D) -> void:
 func on_game_mode_changed(mode: GM.Mode) -> void:
 	match mode:
 		GM.Mode.PLAYING:
-			start()
-		GM.Mode.DEATH:
-			animated_sprite_2d.pause()
-			await get_tree().create_timer(1.0).timeout
-			animated_sprite_2d.play('death')
-			await animated_sprite_2d.animation_finished
-			GM.lives -= 1
+			look_direction = tile_direction
+			
 
 func on_reset(_type: GM.ResetType) -> void:
 	global_position = spawn_point
 	tile = grid.get_tile_from_coords(global_position)
 	tile_direction = tile_direction_reset
-	look_direction = tile_direction
-
-func start() -> void:
 	look_direction = tile_direction

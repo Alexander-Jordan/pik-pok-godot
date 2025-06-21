@@ -112,13 +112,9 @@ size = Vector2(6, 6)
 [node name="Pinky" type="Node2D"]
 z_index = 2
 script = ExtResource("1_mwgsj")
-house_center_point = null
-house_entrance_point = null
 house_state_reset = 3
-house_waiting_point = null
+spawn_point = Vector2(112, 140)
 tile_target_scatter = Vector2i(2, 0)
-speed = null
-tile_direction_reset = null
 metadata/_custom_type_script = "uid://86k20bc4kbvb"
 
 [node name="animatedsprite2d_body" type="AnimatedSprite2D" parent="."]

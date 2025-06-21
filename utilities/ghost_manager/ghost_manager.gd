@@ -1,5 +1,15 @@
 class_name GhostManager extends Node2D
 
+@export var audio_stream_fright: AudioStream
+@export var audio_stream_retreat: AudioStream
+@export var audio_stream_siren_1: AudioStream
+@export var audio_stream_siren_2: AudioStream
+@export var audio_stream_siren_3: AudioStream
+@export var audio_stream_siren_4: AudioStream
+@export var audio_stream_siren_5: AudioStream
+
+@onready var audio_stream_player_2d: AudioStreamPlayer2D = $AudioStreamPlayer2D
+
 var mode_index: int = 0:
 	set(mi):
 		if mi < 0 or mi == mode_index:
@@ -32,6 +42,8 @@ var mode_index: int = 0:
 @onready var timer_mode: Timer = $timer_mode
 
 func _ready() -> void:
+	GM.ghosts_frighten_changed.connect(on_ghosts_frighten_changed)
+	GM.ghosts_retreating_changed.connect(on_ghosts_retreating_changed)
 	GM.level_changed.connect(on_level_changed)
 	GM.mode_changed.connect(on_game_mode_changed)
 	GM.reset.connect(on_reset)
@@ -40,7 +52,51 @@ func _ready() -> void:
 func on_game_mode_changed(mode: GM.Mode) -> void:
 	match mode:
 		GM.Mode.PLAYING:
+			on_ghosts_normal()
 			mode_index = 1
+		_:
+			audio_stream_player_2d.stop()
+
+func on_ghosts_frighten_changed(amount: int) -> void:
+	if GM.ghosts_retreating > 0:
+		return
+	
+	if amount > 0:
+		if audio_stream_player_2d.stream != audio_stream_fright:
+			audio_stream_player_2d.stream = audio_stream_fright
+			audio_stream_player_2d.play()
+		return
+	
+	on_ghosts_normal()
+
+func on_ghosts_retreating_changed(amount: int) -> void:
+	if amount > 0:
+		if audio_stream_player_2d.stream != audio_stream_retreat:
+			audio_stream_player_2d.stream = audio_stream_retreat
+			audio_stream_player_2d.play()
+		return
+	
+	if GM.ghosts_frighten > 0:
+		if audio_stream_player_2d.stream != audio_stream_fright:
+			audio_stream_player_2d.stream = audio_stream_fright
+			audio_stream_player_2d.play()
+		return
+	
+	on_ghosts_normal()
+
+func on_ghosts_normal() -> void:
+	match GM.power_pellets_collected:
+		0:
+			audio_stream_player_2d.stream = audio_stream_siren_1
+		1:
+			audio_stream_player_2d.stream = audio_stream_siren_2
+		2:
+			audio_stream_player_2d.stream = audio_stream_siren_3
+		3:
+			audio_stream_player_2d.stream = audio_stream_siren_4
+		_:
+			audio_stream_player_2d.stream = audio_stream_siren_5
+	audio_stream_player_2d.play()
 
 func on_level_changed(_level: int) -> void:
 	mode_index = 0

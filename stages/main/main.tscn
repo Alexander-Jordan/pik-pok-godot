@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=4 uid="uid://bacrx2nx2m1ed"]
+[gd_scene load_steps=37 format=4 uid="uid://bacrx2nx2m1ed"]
 
 [ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="1_6almw"]
 [ext_resource type="Script" uid="uid://7jp8awjtagrf" path="res://utilities/grid_2d/grid_2d.gd" id="1_60rri"]
@@ -12,7 +12,14 @@
 [ext_resource type="PackedScene" uid="uid://bprwu8crorneb" path="res://entities/ghost/pinky/pinky.tscn" id="7_802tp"]
 [ext_resource type="Script" uid="uid://c7hvif5exm5pe" path="res://utilities/ghost_manager/ghost_manager.gd" id="8_l7y0w"]
 [ext_resource type="PackedScene" uid="uid://b3ewmx1wg4myd" path="res://entities/ghost/blinky/blinky.tscn" id="8_no1gd"]
+[ext_resource type="AudioStream" uid="uid://dyhviwxigk3o3" path="res://entities/ghost/audio/07 Fright Loop.mp3" id="9_i8v7n"]
+[ext_resource type="AudioStream" uid="uid://gocxvdleanqw" path="res://entities/ghost/audio/13 Retreat Loop.mp3" id="10_0eiup"]
+[ext_resource type="AudioStream" uid="uid://djpb1qr35nhqr" path="res://entities/ghost/audio/15 Siren 1 Loop.mp3" id="11_x0phs"]
 [ext_resource type="Script" uid="uid://crmbyqgoxlj3g" path="res://entities/tunnel/tunnel.gd" id="12_drn0y"]
+[ext_resource type="AudioStream" uid="uid://ctesuju5sqxc" path="res://entities/ghost/audio/17 Siren 2 Loop.mp3" id="12_mlblm"]
+[ext_resource type="AudioStream" uid="uid://dt528rcfme2aq" path="res://entities/ghost/audio/19 Siren 3 Loop.mp3" id="13_crusu"]
+[ext_resource type="AudioStream" uid="uid://8sgxbs300t7d" path="res://entities/ghost/audio/21 Siren 4 Loop.mp3" id="14_ux6lt"]
+[ext_resource type="AudioStream" uid="uid://v1uctasb4rqe" path="res://entities/ghost/audio/23 Siren 5 Loop.mp3" id="15_uof2y"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_60rri"]
 tile_data = PackedInt32Array(0, 0, 9, 65536, 0, 10, 131072, 0, 11, 1, 65536, 9, 65537, 65536, 10, 131073, 65536, 11, 2, 65536, 9, 65538, 65536, 10, 131074, 65536, 11, 3, 65536, 9, 65539, 65536, 10, 131075, 65536, 11, 4, 131072, 9, 65540, 131072, 10, 131076, 131072, 11)
@@ -200,7 +207,16 @@ tile_direction_reset = Vector2i(-1, 0)
 
 [node name="GhostManager" type="Node2D" parent="."]
 script = ExtResource("8_l7y0w")
+audio_stream_fright = ExtResource("9_i8v7n")
+audio_stream_retreat = ExtResource("10_0eiup")
+audio_stream_siren_1 = ExtResource("11_x0phs")
+audio_stream_siren_2 = ExtResource("12_mlblm")
+audio_stream_siren_3 = ExtResource("13_crusu")
+audio_stream_siren_4 = ExtResource("14_ux6lt")
+audio_stream_siren_5 = ExtResource("15_uof2y")
 metadata/_custom_type_script = "uid://c7hvif5exm5pe"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="GhostManager"]
 
 [node name="timer_mode" type="Timer" parent="GhostManager"]
 one_shot = true

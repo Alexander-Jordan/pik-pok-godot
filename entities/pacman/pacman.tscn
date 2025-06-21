@@ -121,8 +121,6 @@ radius = 4.12311
 [node name="Pacman" type="Node2D"]
 z_index = 1
 script = ExtResource("1_kyvah")
-speed = null
-tile_direction_reset = null
 metadata/_custom_type_script = "uid://cnin7pfpq1hgb"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -139,6 +137,7 @@ shape = SubResource("CircleShape2D_hit3b")
 
 [node name="Collector2D" type="Area2D" parent="."]
 script = ExtResource("3_kyvah")
+audio_order = 1
 collectable_identifiers = Array[String](["pacdot", "power_pellet", "ghost"])
 metadata/_custom_type_script = "uid://crxmoyjq1vwwu"
 

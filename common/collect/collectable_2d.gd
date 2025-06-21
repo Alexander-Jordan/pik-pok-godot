@@ -30,4 +30,11 @@ func get_audio() -> AudioStream:
 	if audio_streams.is_empty():
 		return null
 	return audio_streams.pick_random()
+
+func get_next_audio(previous: AudioStream) -> AudioStream:
+	if audio_streams.is_empty():
+		return null
+	var previous_index: int = audio_streams.find(previous)
+	var next_index: int = previous_index + 1 if previous_index + 1 == audio_streams.size() - 1 else 0
+	return audio_streams[next_index]
 #endregion
