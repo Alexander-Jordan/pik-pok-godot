@@ -64,6 +64,8 @@ var lives: int = 3:
 			return
 		lives = l
 		lives_changed.emit(l)
+		if mode == Mode.NONE:
+			return
 		
 		if l > LIVES_MIN:
 			reset.emit(ResetType.LIFE)
@@ -121,5 +123,3 @@ func on_reset(type: ResetType) -> void:
 		level = 1
 		lives = 3
 		SS.stats.score = 0
-		await get_tree().create_timer(1).timeout
-		mode = Mode.PLAYING

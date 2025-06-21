@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://b6xioh2e6t3du"]
+[gd_scene load_steps=6 format=3 uid="uid://b6xioh2e6t3du"]
 
 [ext_resource type="Theme" uid="uid://7iwb4w13baxm" path="res://config/theme/default_theme.tres" id="1_norf8"]
 [ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="2_d28ms"]
 [ext_resource type="Script" uid="uid://c1muhmw4wcwei" path="res://ui/game/ui_game.gd" id="2_perei"]
+[ext_resource type="AudioStream" uid="uid://cc400oy6bwjyw" path="res://ui/game/audio/01 Start Game.mp3" id="4_perei"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_no1gd"]
 atlas = ExtResource("2_d28ms")
@@ -166,3 +167,6 @@ modulate = Color(1, 1, 0, 1)
 layout_mode = 2
 texture = SubResource("AtlasTexture_no1gd")
 flip_h = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_perei")

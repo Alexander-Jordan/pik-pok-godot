@@ -1,5 +1,6 @@
 class_name UIGame extends Control
 
+@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var button_start: Button = $VBoxContainer/button_start
 @onready var label_highscore: Label = $VBoxContainer/hboxcontainer_top/margincontainer_highscore/VBoxContainer/label_highscore
 @onready var label_level: Label = $VBoxContainer/hboxcontainer_top/margincontainer_level/VBoxContainer/label_level
@@ -50,3 +51,6 @@ func on_score_changed(score: int) -> void:
 func on_start() -> void:
 	button_start.hide()
 	GM.reset.emit(GM.ResetType.GAME)
+	audio_stream_player.play()
+	await audio_stream_player.finished
+	GM.mode = GM.Mode.PLAYING
