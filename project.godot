@@ -13,7 +13,9 @@ config_version=5
 config/name="Pacman"
 run/main_scene="uid://bacrx2nx2m1ed"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
+boot_splash/image="uid://c7cpof8bn0tu0"
+config/icon="uid://clvnh5gvm2uxq"
+boot_splash/minimum_display_time=3000
 
 [audio]
 
