@@ -1,6 +1,10 @@
 class_name Pacman extends GridTraveller
 
+@export var audio_stream_death_1: AudioStream
+@export var audio_stream_death_2: AudioStream
+
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var audio_stream_player_2d: AudioStreamPlayer2D = $AudioStreamPlayer2D
 @onready var collectable_2d: Collectable2D = $Collectable2D
 @onready var collector_2d: Collector2D = $Collector2D
 @onready var spawn_point: Vector2 = global_position
@@ -70,7 +74,12 @@ func on_collectable_collected() -> void:
 	animated_sprite_2d.pause()
 	await get_tree().create_timer(1.0).timeout
 	animated_sprite_2d.play('death')
+	audio_stream_player_2d.stream = audio_stream_death_1
+	audio_stream_player_2d.play()
 	await animated_sprite_2d.animation_finished
+	audio_stream_player_2d.stream = audio_stream_death_2
+	audio_stream_player_2d.play()
+	await audio_stream_player_2d.finished
 	GM.lives -= 1
 
 func on_collector_collected(collectable: Collectable2D) -> void:
