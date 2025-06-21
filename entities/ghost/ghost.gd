@@ -192,19 +192,19 @@ func get_speed() -> float:
 		1:
 			if in_tunnel:
 				return speed * 0.4
-			elif frighten:
+			elif GM.ghosts_frighten > 0:
 				return speed * 0.5 
 			return speed * 0.75
 		2, 3, 4:
 			if in_tunnel:
 				return speed * 0.45
-			elif frighten:
+			elif GM.ghosts_frighten > 0:
 				return speed * 0.55
 			return speed * 0.85
 		5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20:
 			if in_tunnel:
 				return speed * 0.5
-			elif frighten:
+			elif GM.ghosts_frighten > 0:
 				return speed * 0.6
 			return speed * 0.95
 		_:
