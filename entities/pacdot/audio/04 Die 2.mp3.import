@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ccurxdjxy13u"
+path="res://.godot/imported/04 Die 2.mp3-39903ba61c3f1c6e63e67d682bfd19d8.mp3str"
+
+[deps]
+
+source_file="res://entities/pacdot/audio/04 Die 2.mp3"
+dest_files=["res://.godot/imported/04 Die 2.mp3-39903ba61c3f1c6e63e67d682bfd19d8.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

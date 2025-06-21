@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c8g8x6p565f0h"
+path="res://.godot/imported/20 Siren 3 Start.mp3-0ec0a53b44d769636e36e7087a374587.mp3str"
+
+[deps]
+
+source_file="res://entities/ghost/audio/20 Siren 3 Start.mp3"
+dest_files=["res://.godot/imported/20 Siren 3 Start.mp3-0ec0a53b44d769636e36e7087a374587.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

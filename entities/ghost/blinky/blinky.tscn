@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://b3ewmx1wg4myd"]
+[gd_scene load_steps=20 format=3 uid="uid://b3ewmx1wg4myd"]
 
 [ext_resource type="Script" uid="uid://dwrc6pppqhrdt" path="res://entities/ghost/blinky/blinky.gd" id="1_fdrnd"]
 [ext_resource type="Texture2D" uid="uid://dreypdk7si5en" path="res://assets/spritesheet.png" id="2_r4ry4"]
 [ext_resource type="Script" uid="uid://cinn5yixd7nw6" path="res://common/collect/collectable_2d.gd" id="3_r4ry4"]
 [ext_resource type="Script" uid="uid://crxmoyjq1vwwu" path="res://common/collect/collector_2d.gd" id="4_vl8vr"]
+[ext_resource type="AudioStream" uid="uid://de55jggtyjs58" path="res://entities/ghost/audio/12 Munch Ghost.mp3" id="4_wsxch"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qovne"]
 atlas = ExtResource("2_r4ry4")
@@ -112,13 +113,7 @@ size = Vector2(6, 6)
 [node name="Blinky" type="Node2D"]
 z_index = 2
 script = ExtResource("1_fdrnd")
-house_center_point = null
-house_entrance_point = null
-house_state_reset = null
-house_waiting_point = null
-tile_target_scatter = null
-speed = null
-tile_direction_reset = null
+spawn_point = Vector2(112, 116)
 metadata/_custom_type_script = "uid://dwrc6pppqhrdt"
 
 [node name="animatedsprite2d_body" type="AnimatedSprite2D" parent="."]
@@ -142,6 +137,7 @@ shape = SubResource("RectangleShape2D_xbyum")
 
 [node name="Collectable2D" type="Area2D" parent="."]
 script = ExtResource("3_r4ry4")
+audio_streams = Array[AudioStream]([ExtResource("4_wsxch")])
 disabled = true
 identifier = "ghost"
 metadata/_custom_type_script = "uid://cinn5yixd7nw6"

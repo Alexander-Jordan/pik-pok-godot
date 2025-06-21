@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bdpna2kjebepw"
+path="res://.godot/imported/24 Siren 5 Start.mp3-6c581dc10b133bf738e43a61d2b67ea8.mp3str"
+
+[deps]
+
+source_file="res://entities/ghost/audio/24 Siren 5 Start.mp3"
+dest_files=["res://.godot/imported/24 Siren 5 Start.mp3-6c581dc10b133bf738e43a61d2b67ea8.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

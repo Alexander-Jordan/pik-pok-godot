@@ -30,6 +30,7 @@ const POINTS_DEFAULT: int = 200
 		house_state_reset = hsr
 @export var house_waiting_point: Vector2 = Vector2(112, 140)
 @export var pacman: Pacman
+@export var spawn_point: Vector2 = Vector2.ZERO
 @export var tile_target_scatter: Vector2i = Vector2i.ZERO
 
 @onready var animatedsprite_2d_body: AnimatedSprite2D = $animatedsprite2d_body
@@ -38,7 +39,6 @@ const POINTS_DEFAULT: int = 200
 @onready var area_2d_tunnel_trigger: Area2D = $area2d_tunnel_trigger
 @onready var collectable_2d: Collectable2D = $Collectable2D
 @onready var collector_2d: Collector2D = $Collector2D
-@onready var spawn_point: Vector2 = global_position
 @onready var timer_frighten: Timer = $timer_frighten
 @onready var timer_house: Timer = $timer_house
 
@@ -47,6 +47,7 @@ var frighten: bool = false:
 		if f == frighten:
 			return
 		frighten = f
+		GM.ghosts_frighten += 1 if f else -1
 		animatedsprite_2d_frightened.visible = f
 		animatedsprite_2d_body.visible = !f
 		collectable_2d.disabled = !f
@@ -84,9 +85,11 @@ var eaten: bool = false:
 		if e == eaten:
 			return
 		eaten = e
+		GM.ghosts_retreating += 1 if e else -1
 		if e:
 			SS.stats.score += points
 			SS.stats.ghosts_eaten += 1
+			SS.save_stats()
 		else:
 			collector_2d.disabled = false
 		# to keep things simple, just always set frighten to false at this point
@@ -190,19 +193,19 @@ func get_speed() -> float:
 		1:
 			if in_tunnel:
 				return speed * 0.4
-			elif frighten:
+			elif GM.ghosts_frighten > 0:
 				return speed * 0.5 
 			return speed * 0.75
 		2, 3, 4:
 			if in_tunnel:
 				return speed * 0.45
-			elif frighten:
+			elif GM.ghosts_frighten > 0:
 				return speed * 0.55
 			return speed * 0.85
 		5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20:
 			if in_tunnel:
 				return speed * 0.5
-			elif frighten:
+			elif GM.ghosts_frighten > 0:
 				return speed * 0.6
 			return speed * 0.95
 		_:
@@ -258,14 +261,13 @@ func on_collected() -> void:
 func on_game_mode_changed(m: GM.Mode) -> void:
 	match m:
 		GM.Mode.PLAYING:
-			start()
 			if house_state == HouseState.WAITING:
 				timer_house.start()
 		GM.Mode.DEATH:
 			await get_tree().create_timer(1.0).timeout
-			animatedsprite_2d_body.hide()
-			animatedsprite_2d_eyes.hide()
-			animatedsprite_2d_frightened.hide()
+			visible = false
+			process_mode = Node.PROCESS_MODE_DISABLED
+			
 
 func on_ghost_frighten_time(time: float) -> void:
 	if eaten:
@@ -298,13 +300,9 @@ func on_tunnel_trigger_area_exited(area: Area2D) -> void:
 	if area is Tunnel:
 		in_tunnel = false
 
-func start() -> void:
-	if house_state == HouseState.WAITING:
-		timer_house.start()
-
 func on_reset(_type: GM.ResetType) -> void:
-	animatedsprite_2d_body.show()
-	animatedsprite_2d_eyes.show()
+	visible = true
+	process_mode = Node.PROCESS_MODE_INHERIT
 	frighten = false
 	eaten = false
 	global_position = spawn_point

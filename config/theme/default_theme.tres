@@ -1,6 +1,72 @@
-[gd_resource type="Theme" load_steps=37 format=3 uid="uid://7iwb4w13baxm"]
+[gd_resource type="Theme" load_steps=41 format=3 uid="uid://7iwb4w13baxm"]
 
 [ext_resource type="FontFile" uid="uid://b8vjokos354jx" path="res://assets/fonts/5squared_pixel/5squared-pixel.ttf" id="1_cwq3q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nsft8"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8kc2h"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cwq3q"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4c5le"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
 
 [sub_resource type="Image" id="Image_cwq3q"]
 data = {
@@ -230,6 +296,10 @@ content_margin_bottom = 4.0
 [resource]
 default_font = ExtResource("1_cwq3q")
 Button/font_sizes/font_size = 8
+Button/styles/focus = SubResource("StyleBoxFlat_nsft8")
+Button/styles/hover = SubResource("StyleBoxFlat_8kc2h")
+Button/styles/normal = SubResource("StyleBoxFlat_cwq3q")
+Button/styles/pressed = SubResource("StyleBoxFlat_4c5le")
 CheckBox/colors/font_color = Color(0.875, 0.875, 0.875, 1)
 CheckBox/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
 CheckBox/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)

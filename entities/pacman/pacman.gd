@@ -1,6 +1,10 @@
 class_name Pacman extends GridTraveller
 
+@export var audio_stream_death_1: AudioStream
+@export var audio_stream_death_2: AudioStream
+
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var audio_stream_player_2d: AudioStreamPlayer2D = $AudioStreamPlayer2D
 @onready var collectable_2d: Collectable2D = $Collectable2D
 @onready var collector_2d: Collector2D = $Collector2D
 @onready var spawn_point: Vector2 = global_position
@@ -51,14 +55,32 @@ func get_input() -> void:
 func get_speed() -> float:
 	match GM.level:
 		1:
+			if GM.ghosts_frighten > 0:
+				return speed * 0.9
 			return speed * 0.8
+		2, 3, 4:
+			if GM.ghosts_frighten > 0:
+				return speed * 0.95
+			return speed * 0.9
 		5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20:
 			return speed
 		_:
+			if GM.ghosts_frighten > 0:
+				return speed
 			return speed * 0.9
 
 func on_collectable_collected() -> void:
 	GM.mode = GM.Mode.DEATH
+	animated_sprite_2d.pause()
+	await get_tree().create_timer(1.0).timeout
+	animated_sprite_2d.play('death')
+	audio_stream_player_2d.stream = audio_stream_death_1
+	audio_stream_player_2d.play()
+	await animated_sprite_2d.animation_finished
+	audio_stream_player_2d.stream = audio_stream_death_2
+	audio_stream_player_2d.play()
+	await audio_stream_player_2d.finished
+	GM.lives -= 1
 
 func on_collector_collected(collectable: Collectable2D) -> void:
 	match collectable.identifier:
@@ -69,19 +91,11 @@ func on_collector_collected(collectable: Collectable2D) -> void:
 func on_game_mode_changed(mode: GM.Mode) -> void:
 	match mode:
 		GM.Mode.PLAYING:
-			start()
-		GM.Mode.DEATH:
-			animated_sprite_2d.pause()
-			await get_tree().create_timer(1.0).timeout
-			animated_sprite_2d.play('death')
-			await animated_sprite_2d.animation_finished
-			GM.lives -= 1
+			look_direction = tile_direction
+			
 
 func on_reset(_type: GM.ResetType) -> void:
 	global_position = spawn_point
 	tile = grid.get_tile_from_coords(global_position)
 	tile_direction = tile_direction_reset
-	look_direction = tile_direction
-
-func start() -> void:
 	look_direction = tile_direction

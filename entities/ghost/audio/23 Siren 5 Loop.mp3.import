@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://v1uctasb4rqe"
+path="res://.godot/imported/23 Siren 5 Loop.mp3-9328e8a488e2226863e3db4ec88ea1a5.mp3str"
+
+[deps]
+
+source_file="res://entities/ghost/audio/23 Siren 5 Loop.mp3"
+dest_files=["res://.godot/imported/23 Siren 5 Loop.mp3-9328e8a488e2226863e3db4ec88ea1a5.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
