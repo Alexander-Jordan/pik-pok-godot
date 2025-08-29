@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Pacman"
+config/name="Pik-Pok"
 run/main_scene="uid://bacrx2nx2m1ed"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/image="uid://c7cpof8bn0tu0"
