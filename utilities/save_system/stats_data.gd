@@ -4,13 +4,13 @@ class_name StatsData extends Resource
 #region VARIABLES
 ## How many times has the game been booted?
 @export var game_booted_count: int = 0
-## How many times has the a ghost been eaten?
-@export var ghosts_eaten: int = 0:
-	set(ge):
-		if ge < 0 or ge == ghosts_eaten:
+## How many times has the a police been taken?
+@export var police_taken: int = 0:
+	set(pt):
+		if pt < 0 or pt == police_taken:
 			return
-		ghosts_eaten = ge
-		ghosts_eaten_changed.emit(ge)
+		police_taken = pt
+		police_taken_changed.emit(pt)
 ## The highest score set.
 @export var highscore: int = 0:
 	set(h):
@@ -30,7 +30,7 @@ class_name StatsData extends Resource
 		if s > highscore:
 			highscore = s
 
-signal ghosts_eaten_changed(chosts_eaten: int)
+signal police_taken_changed(police_taken: int)
 signal highscore_changed(highscore: int)
 signal score_changed(score: int)
 #endregion

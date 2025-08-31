@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://de55jggtyjs58"
+path="res://.godot/imported/12 Munch Ghost.mp3-891d604867f71689cdd2512779395651.mp3str"
+
+[deps]
+
+source_file="res://entities/police/audio/12 Munch Ghost.mp3"
+dest_files=["res://.godot/imported/12 Munch Ghost.mp3-891d604867f71689cdd2512779395651.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

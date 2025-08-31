@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dc82krjlc4dyv"
+path="res://.godot/imported/16 Siren 1 Start.mp3-0b56f325bd2e38afa3ede1461f75139d.mp3str"
+
+[deps]
+
+source_file="res://entities/police/audio/16 Siren 1 Start.mp3"
+dest_files=["res://.godot/imported/16 Siren 1 Start.mp3-0b56f325bd2e38afa3ede1461f75139d.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

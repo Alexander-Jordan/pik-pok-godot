@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ctesuju5sqxc"
+path="res://.godot/imported/17 Siren 2 Loop.mp3-56cd08129b3a2b00e06bd123951447e8.mp3str"
+
+[deps]
+
+source_file="res://entities/police/audio/17 Siren 2 Loop.mp3"
+dest_files=["res://.godot/imported/17 Siren 2 Loop.mp3-56cd08129b3a2b00e06bd123951447e8.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
