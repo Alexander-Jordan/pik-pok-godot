@@ -3,7 +3,7 @@ class_name GameManager extends Node
 const LIVES_MIN: int = 0
 const LIVES_MAX: int = 8
 
-enum GhostMode {
+enum PoliceMode {
 	CHASE,
 	SCATTER,
 }
@@ -21,33 +21,33 @@ enum ResetType {
 	LIFE,
 }
 
-var dots_collected: int = 0:
-	set(dc):
-		if dots_collected < 0 or dc == dots_collected:
+var money_collected: int = 0:
+	set(mc):
+		if money_collected < 0 or mc == money_collected:
 			return
-		dots_collected = dc
-		if dc == 244:
+		money_collected = mc
+		if mc == 244:
 			GM.mode = GM.Mode.CLEAR
 			await get_tree().create_timer(1.0).timeout
 			level += 1
-var ghosts_frighten: int = 0:
-	set(gf):
-		if gf < 0 or gf == ghosts_frighten:
+var police_frighten: int = 0:
+	set(pf):
+		if pf < 0 or pf == police_frighten:
 			return
-		ghosts_frighten = gf
-		ghosts_frighten_changed.emit(gf)
-var ghost_mode: GhostMode = GhostMode.SCATTER:
-	set(gm):
-		if !GhostMode.values().has(gm) or ghost_mode == gm:
+		police_frighten = pf
+		police_frighten_changed.emit(pf)
+var police_mode: PoliceMode = PoliceMode.SCATTER:
+	set(pm):
+		if !PoliceMode.values().has(pm) or police_mode == pm:
 			return
-		ghost_mode = gm
-		ghost_mode_changed.emit(gm)
-var ghosts_retreating: int = 0:
-	set(gr):
-		if gr < 0 or gr == ghosts_retreating:
+		police_mode = pm
+		police_mode_changed.emit(pm)
+var police_retreating: int = 0:
+	set(pr):
+		if pr < 0 or pr == police_retreating:
 			return
-		ghosts_retreating = gr
-		ghosts_retreating_changed.emit(gr)
+		police_retreating = pr
+		police_retreating_changed.emit(pr)
 var level: int = 1:
 	set(l):
 		if l < 1 or l == level:
@@ -81,12 +81,12 @@ var mode: Mode = Mode.NONE:
 			return
 		mode = m
 		mode_changed.emit(m)
-var power_pellets_collected: int = 0
+var super_money_collected: int = 0
 
-signal ghosts_frighten_changed(amount: int)
-signal ghost_mode_changed(ghost_mode: GhostMode)
-signal ghosts_retreating_changed(amount: int)
-signal ghost_frighten_time(time: float)
+signal police_frighten_changed(amount: int)
+signal police_mode_changed(police_mode: PoliceMode)
+signal police_retreating_changed(amount: int)
+signal police_frighten_time(time: float)
 signal level_changed(level: int)
 signal lives_changed(lives: int)
 signal mode_changed(mode: Mode)
@@ -96,10 +96,10 @@ func _ready() -> void:
 	reset.connect(on_reset)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed('dev_ghost_frighten_time'):
-		ghost_frighten_time.emit(PowerPellet.get_time())
-	elif event.is_action_pressed('dev_ghost_frighten_time_default'):
-		ghost_frighten_time.emit(10.0)
+	if event.is_action_pressed('dev_police_frighten_time'):
+		police_frighten_time.emit(SuperMoney.get_time())
+	elif event.is_action_pressed('dev_police_frighten_time_default'):
+		police_frighten_time.emit(10.0)
 	if event.is_action_pressed('dev_lives_decrease'):
 		lives -= 1
 	elif event.is_action_pressed('dev_lives_increase'):
@@ -119,9 +119,9 @@ func on_reset(type: ResetType) -> void:
 	SS.save_stats()
 	if type == ResetType.LIFE:
 		return
-	dots_collected = 0
+	money_collected = 0
 	mode = Mode.NONE
-	power_pellets_collected = 0
+	super_money_collected = 0
 	if type == ResetType.GAME:
 		level = 1
 		lives = 3
