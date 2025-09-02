@@ -12,14 +12,14 @@
 [ext_resource type="PackedScene" uid="uid://bprwu8crorneb" path="res://entities/police/pink_police/pink_police.tscn" id="7_802tp"]
 [ext_resource type="Script" uid="uid://c7hvif5exm5pe" path="res://utilities/police_manager/police_manager.gd" id="8_l7y0w"]
 [ext_resource type="PackedScene" uid="uid://b3ewmx1wg4myd" path="res://entities/police/red_police/red_police.tscn" id="8_no1gd"]
-[ext_resource type="AudioStream" uid="uid://dyhviwxigk3o3" path="res://entities/police/audio/07 Fright Loop.mp3" id="9_i8v7n"]
-[ext_resource type="AudioStream" uid="uid://gocxvdleanqw" path="res://entities/police/audio/13 Retreat Loop.mp3" id="10_0eiup"]
-[ext_resource type="AudioStream" uid="uid://djpb1qr35nhqr" path="res://entities/police/audio/15 Siren 1 Loop.mp3" id="11_x0phs"]
+[ext_resource type="AudioStream" uid="uid://bvx3sylsl7yjk" path="res://entities/police/audio/frighten.wav" id="9_0eiup"]
+[ext_resource type="AudioStream" uid="uid://d26q4kpunxxaa" path="res://entities/police/audio/retreat.wav" id="10_x0phs"]
+[ext_resource type="AudioStream" uid="uid://cjd5cxrjwk3kr" path="res://entities/police/audio/the-return-of-the-8-bit-era/the-return-of-the-8-bit-era-301292.wav" id="11_0eiup"]
 [ext_resource type="Script" uid="uid://crmbyqgoxlj3g" path="res://entities/tunnel/tunnel.gd" id="12_drn0y"]
-[ext_resource type="AudioStream" uid="uid://ctesuju5sqxc" path="res://entities/police/audio/17 Siren 2 Loop.mp3" id="12_mlblm"]
-[ext_resource type="AudioStream" uid="uid://dt528rcfme2aq" path="res://entities/police/audio/19 Siren 3 Loop.mp3" id="13_crusu"]
-[ext_resource type="AudioStream" uid="uid://8sgxbs300t7d" path="res://entities/police/audio/21 Siren 4 Loop.mp3" id="14_ux6lt"]
-[ext_resource type="AudioStream" uid="uid://v1uctasb4rqe" path="res://entities/police/audio/23 Siren 5 Loop.mp3" id="15_uof2y"]
+[ext_resource type="AudioStream" uid="uid://cga33tpxdikvl" path="res://entities/police/audio/the-return-of-the-8-bit-era/the-return-of-the-8-bit-era-301292-pitch-1.wav" id="12_x0phs"]
+[ext_resource type="AudioStream" uid="uid://bqb3k6o2gt4ut" path="res://entities/police/audio/the-return-of-the-8-bit-era/the-return-of-the-8-bit-era-301292-pitch-2.wav" id="13_mlblm"]
+[ext_resource type="AudioStream" uid="uid://b6alpgbguuggr" path="res://entities/police/audio/the-return-of-the-8-bit-era/the-return-of-the-8-bit-era-301292-pitch-3.wav" id="14_crusu"]
+[ext_resource type="AudioStream" uid="uid://b8j833k4tkkfi" path="res://entities/police/audio/the-return-of-the-8-bit-era/the-return-of-the-8-bit-era-301292-pitch-4.wav" id="15_ux6lt"]
 [ext_resource type="Texture2D" uid="uid://db4omi7en4l18" path="res://entities/money/money.png" id="18_0eiup"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mlblm"]
@@ -107,13 +107,13 @@ tile_direction_reset = Vector2i(-1, 0)
 
 [node name="PoliceManager" type="Node2D" parent="."]
 script = ExtResource("8_l7y0w")
-audio_stream_fright = ExtResource("9_i8v7n")
-audio_stream_retreat = ExtResource("10_0eiup")
-audio_stream_siren_1 = ExtResource("11_x0phs")
-audio_stream_siren_2 = ExtResource("12_mlblm")
-audio_stream_siren_3 = ExtResource("13_crusu")
-audio_stream_siren_4 = ExtResource("14_ux6lt")
-audio_stream_siren_5 = ExtResource("15_uof2y")
+audio_stream_fright = ExtResource("9_0eiup")
+audio_stream_retreat = ExtResource("10_x0phs")
+audio_stream_siren_1 = ExtResource("11_0eiup")
+audio_stream_siren_2 = ExtResource("12_x0phs")
+audio_stream_siren_3 = ExtResource("13_mlblm")
+audio_stream_siren_4 = ExtResource("14_crusu")
+audio_stream_siren_5 = ExtResource("15_ux6lt")
 metadata/_custom_type_script = "uid://c7hvif5exm5pe"
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="PoliceManager"]
