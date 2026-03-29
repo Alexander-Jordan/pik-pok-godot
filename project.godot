@@ -8,11 +8,15 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Pik-Pok"
 run/main_scene="uid://bacrx2nx2m1ed"
-config/features=PackedStringArray("4.4", "GL Compatibility")
+config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(0.105882, 0.156863, 0.184314, 1)
 boot_splash/image="uid://clvnh5gvm2uxq"
 config/icon="uid://clvnh5gvm2uxq"
